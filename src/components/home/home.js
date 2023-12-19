@@ -381,6 +381,15 @@ const Dashboard = () => {
       alert("Error Trigered");
     }
   };
+  const handleSubmitWithdrawStaking = async (event) => {
+    event.preventDefault();
+    try {
+      let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
+      await ICU_.methods.withdrawStakingIncome().send({ from: account });
+    } catch (e) {
+      alert("Error Trigered");
+    }
+  };
   // Handle Submin on StackeCBC
   const handleSubmitStake = async (event) => {
     event.preventDefault();
@@ -894,6 +903,32 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+             {/* WithDraw Staking Income  */}
+        <div className="col-sm-12 col-md-6 col-lg-6 grid-margin">
+          <div className="card">
+            <div className="card-body">
+              <h5>WithDraw Staking Income</h5>
+              <div className="row">
+                <div className="col-sm-12 my-auto">
+                  <form
+                    className="forms-sample"
+                    onSubmit={handleSubmitWithdrawStaking}
+                  >
+                    <div className="form-group w-100">
+                      <input
+                        className="btn mt-3 submitbtn_"
+                        type="submit"
+                        value="Withdraw Staking Income"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>             
       </div>
     </div>
   );
