@@ -385,7 +385,7 @@ const Dashboard = () => {
     event.preventDefault();
     try {
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
-      await ICU_.methods.withdrawStakingIncome().send({ from: account });
+      await ICU_.methods.withdrawStakingROI().send({ from: account });
     } catch (e) {
       alert("Error Trigered");
     }
