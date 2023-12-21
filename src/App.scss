@@ -4,9 +4,30 @@
 @import "~compass-mixins/lib/compass";
 @import "~compass-mixins/lib/animate";
 @import "~bootstrap/scss/bootstrap";
+.MuiBox-root {
+  button {
+    color: #ffffff !important;
+  }
+}
+.css-1xv7gii-MuiButtonBase-root-MuiButton-root {
+  color: #ffffff !important;
+  background-color: #394465 !important;
+  border: 1px solid white !important;
+}
+.css-11b3ww9-MuiPaper-root-MuiAppBar-root {
+  // background-color: #d219a9a8 !important;
+  background-color: #1e2da1 !important ;
+}
+// .css-1kkpk3h-MuiButtonBase-root-MuiButton-root {
+//   // color: #000 !important;
+// }
+.main-panel {
+  background-color: #524cb1 !important;
+}
 
 .home-container {
   padding-top: 80px;
+  background-color: rgb(30 45 161 / 73%) !important;
 }
 .custom-eventlist {
   padding-top: 80px;
@@ -14,51 +35,22 @@
 .card {
   margin: 15px;
   border: none;
-  border-radius: 15px;
-  // height: 80%;
-  h4 {
-    font-weight: bold;
-  }
+  // border-radius: 0px 83px;
+  text-align: center;
+  box-shadow: 16px 17px 3px 0 rgb(0 0 0 / 50%);
+
   .card-body {
     border: none;
-    //color: #f3ad23;
-    color: #23f3a0;
+    color: #ffffff;
     padding: 1.75rem 1.5625rem;
-    background: #050505c7;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 30px 31px 33px rgb(8 14 35);
+    background: rgb(2 15 56 / 78%) !important;
+    // border-radius: 0px 63px;
+    border-radius: 5px;
   }
-  .card-body-stakes {
-    border: none;
-    //color: #f3ad23;
-    color: #23f3a0;
-    padding: 1.75rem 1.5625rem;
-    background: #26260dd0;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 30px 31px 33px rgb(8 14 35);
-  }
-}
-.css-11b3ww9-MuiPaper-root-MuiAppBar-root {
-  background-color: #050505d4 !important;
 }
 
 .container-scroller {
-  background-color: #dfe1e7;
-  // background-color: #0c2448;
-}
-.css-11b3ww9-MuiPaper-root-MuiAppBar-root {
-  button {
-    &:first-child {
-      color: #23def3 !important;
-    }
-    &:last-child {
-      color: #2f2f2f !important;
-      border: 2px solid #ffffff;
-      background-color: #23def3;
-    }
-  }
+  background-color: #000//#7a49a5; //0c2448
 }
 
 .form-control {
@@ -128,12 +120,8 @@ a {
 }
 
 .ref-btn {
-  // color: #23def3;
-  // background-color: #2f2f2f;
-
-  color: #2f2f2f !important;
-  border: 2px solid #ffffff;
-  background-color: #23def3;
+  color: #fff;
+  background-color: #0b6efd;
   border: none;
   padding: 12px 25px;
   border-radius: 36px;
@@ -147,93 +135,77 @@ a {
   margin-left: 15px;
 }
 
-.submitbtn_ {
-  // color: #23def3;
-  color: #2f2f2f !important;
-  border: 2px solid #ffffff;
-  background-color: #23def3;
-  border-radius: 22px;
-  &:hover {
-    color: #2f2f2f !important;
-    border: 2px solid #ffffff;
-    background-color: #23def3;
+.ant-model-custom {
+  position: fixed !important;
+  width: 100% !important;
+  height: 100vh !important;
+  transform-origin: 250px 321.5px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgb(220 220 220 / 66%) !important;
+  border-radius: 20px !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  div {
+    background-color: none !important;
+    background: none !important;
+    box-shadow: none !important;
   }
 }
-
-.withdrwaroi {
-  // background-color: transparent;
-  // border: 2px solid #23def3;
-  // color: #23def3;
-
-  color: #2f2f2f !important;
-  border: 2px solid #ffffff;
-  background-color: #23def3;
-
-  border-radius: 60px;
-  padding: 10px 22px;
+.public-section-bg {
+  background-color: rgb(2 136 39 / 45%);
+  padding-top: 40px;
+  padding-bottom: 40px;
+  box-shadow: 0px 8px 42px 23px rgb(234 32 10 / 50%);
+  border-radius: 30px;
+  margin-top: 60px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
-  background-color: #2f2f2f !important;
-}
-.css-10hburv-MuiTypography-root {
-  color: #23def3 !important;
-}
-
-.header_BTN {
-  background-color: "#23def3" !important;
-  color: "#2f2f2f" !important;
-  border-radius: "20px;" !important;
+.private-section-bg {
+  // background-color: rgba(213, 0, 223, 0.23);
+  box-shadow: 0px 0px 30px 7px rgb(184 232 17 / 94%); //7px 5px 9px 13px rgb(0 0 0 / 51%);
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-radius: 30px;
+  margin-top: 60px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-.h80 {
-  height: 80%;
-}
-.css-1bh4fj9 {
-  color: #23def3 !important;
-}
-
-nav {
-  background-color: #2f2f2f !important;
-  // color: #23def3 !important;
-  // .css-144j1un {
-  //   // color: #23def3 !important;
-  // }
-  button {
-    // color: #23def3 !important;
-
-    // border-radius: 22px;
-    // &:hover {
-    //   color: #2f2f2f !important;
-    //   border: 2px solid #ffffff;
-    //   background-color: #23def3;
-    // }
-  }
-}
-.css-144j1un {
-  color: #2f2f2f !important;
-  border: 2px solid #ffffff !important;
-  background-color: #23def3 !important;
+.private-section-bg-light-red {
+  background-color: rgb(236 82 82);
+  box-shadow: 0px 0px 30px 7px rgb(184 232 17 / 94%); //7px 5px 9px 13px rgb(0 0 0 / 51%);
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-radius: 30px;
+  margin-top: 60px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-.loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999; /* Ensure it's above other elements */
+.private-section-bg-light-yellow {
+  background-color: rgb(174 187 77);
+  box-shadow: 0px 0px 30px 7px rgb(50 219 15 / 94%); //7px 5px 9px 13px rgb(0 0 0 / 51%);
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-radius: 30px;
+  margin-top: 60px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-.loader-overlay div {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333; /* Adjust the text color as needed */
+.private-section-bg-light-green {
+  background-color: rgb(47 137 53 / 79%);
+  box-shadow: 0px 0px 30px 7px rgb(242 68 10 / 94%);
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-radius: 30px;
+  margin-top: 60px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
-
-/* Add additional styling as needed */
-

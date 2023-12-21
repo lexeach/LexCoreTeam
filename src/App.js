@@ -1,16 +1,14 @@
 import React from "react";
 import "./App.scss";
-import Header from "./components/Header";
-import Home from "./components/home/home";
+import AppRoutes from "./AppRoutes";
 
 const App = () => {
   return (
     <div className="container-scroller ">
-      <div className="container page-body-wrapper">
+      <div className="container-fluid page-body-wrapper">
         <div className="main-panel ">
           <div className="content-wrapper">
-            <Header />
-            <Home />
+            <AppRoutes />
           </div>
         </div>
       </div>
