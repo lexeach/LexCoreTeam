@@ -44,7 +44,10 @@ const Dashboard = () => {
   const [incomeMissed, setIncomeMissed] = useState();
   const [withdrawableIncome, setWithdrawableIncome] = useState();
   const [rewardWin, setRewardWin] = useState();
-
+  const [registrationTime, setRegistrationTime] = useState();
+  const [stkTime, setStkTime] = useState();
+  const [stkCapping, setStkCapping] = useState();
+  const [stkMonths, setStkMonths] = useState();
   const [referrerId, setReferrerId] = useState();
   const [stakeAmount, setStakeAmount] = useState();
   const [stakeMonths, setStakeMonths] = useState("24");
@@ -91,6 +94,17 @@ const Dashboard = () => {
         web3.utils.fromWei(realStakingRoi, "ether")
       ).toFixed(2);
       setRealWithdrawableStakingRoi(realStakingRoi);
+
+      let regTime = await NEW_CBC_ROI.methods.regTime(accounts[0]).call();
+      setRegistrationTime(await epochToDate(regTime));
+
+      let stakeTim = await NEW_CBC_ROI.methods.stkTime(accounts[0]).call();
+      setStkTime(await epochToDate(stakeTim)); // await epochToDate(user.stakeTimes)
+      let stkCap = await NEW_CBC_ROI.methods.stkCapping(accounts[0]).call();
+      stkCap = Number(web3.utils.fromWei(stkCap, "ether")).toFixed(2);
+      setStkCapping(stkCap);
+      let stkMonth = await NEW_CBC_ROI.methods.stakeMonths(accounts[0]).call();
+      setStkMonths(stkMonth);
       // Set Stacke
       const stakeUse = await NEW_CBC_ROI.methods.stakeUser(accounts[0]).call();
 
@@ -126,6 +140,7 @@ const Dashboard = () => {
       setTotalIncomeTaken(
         Number(web3.utils.fromWei(totalTokenTaken, "ether")).toFixed(2)
       );
+      // await epochToDate(user.stakeTimes)
       // Set Total Withdrawable
       const totalWithdrawa = await NEW_CBC_ROI.methods
         .totalWithdrawable(accounts[0])
@@ -151,9 +166,7 @@ const Dashboard = () => {
       setAssuredReward(
         Number(web3.utils.fromWei(user.assuredReward, "ether")).toFixed(2)
       );
-      setLevelIncomeReceived(
-        Number(user.levelIncomeReceived).toFixed()
-      );
+      setLevelIncomeReceived(Number(user.levelIncomeReceived).toFixed());
       setIncomeTaken(
         Number(web3.utils.fromWei(user.incomeTaken, "ether")).toFixed(2)
       );
@@ -164,9 +177,7 @@ const Dashboard = () => {
         setUserStakeTimes(await epochToDate(user.stakeTimes));
       }
       test1();
-      setIncomeMissed(
-        Number(user.incomeMissed).toFixed()
-      );
+      setIncomeMissed(Number(user.incomeMissed).toFixed());
       const rewardWins = await NEW_CBC_ROI.methods
         .rewardWin(accounts[0])
         .call();
@@ -381,7 +392,8 @@ const Dashboard = () => {
       alert("Error Trigered");
     }
   };
-  const handleSubmitWithdrawStaking = async (event) => {
+  // Withdraw Staking ROI
+  const handleSubmitStakingWithdraw = async (event) => {
     event.preventDefault();
     try {
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
@@ -469,8 +481,7 @@ const Dashboard = () => {
             <div className="card-body">
               <h5>Last TopUP</h5>
 
-              <h4 className="mb-0">{lastTopUp ? lastTopUp : 0} USDT
-             </h4>
+              <h4 className="mb-0">{lastTopUp ? lastTopUp : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -491,7 +502,8 @@ const Dashboard = () => {
             <div className="card-body">
               <h5>Withdrawable Staking ROI</h5>
               <h4 className="mb-0">
-                {realWithdrawableStakingRoi ? realWithdrawableStakingRoi : 0} USDT{" "}
+                {realWithdrawableStakingRoi ? realWithdrawableStakingRoi : 0}{" "}
+                USDT{" "}
               </h4>
             </div>
           </div>
@@ -510,8 +522,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body-stakes">
               <h5># Last Stake</h5>
-              <h4 className="mb-0">{lastStake ? lastStake : 0} USDT
-             </h4>
+              <h4 className="mb-0">{lastStake ? lastStake : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -519,9 +530,8 @@ const Dashboard = () => {
         <div className="col-lg-4 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body-stakes">
-              <h5># Total Stake</h5>
-              <h4 className="mb-0">{totalStake ? totalStake : 0} USDT
-               </h4>
+              <h5>Staking Referral Bonus</h5>
+              <h4 className="mb-0">{totalStake ? totalStake : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -530,8 +540,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body-stakes">
               <h5># Current Stake</h5>
-              <h4 className="mb-0">{currentStake ? currentStake : 0} USDT 
-              </h4>
+              <h4 className="mb-0">{currentStake ? currentStake : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -565,6 +574,45 @@ const Dashboard = () => {
               <h4 className="mb-0">
                 {totalIncomeTaken ? totalIncomeTaken : 0} USDT
               </h4>
+            </div>
+          </div>
+        </div>
+        {/* Registration Start Time  */}
+        <div className="col-lg-4 col-md-6 col-sm-12 grid-margin">
+          <div className="card">
+            <div className="card-body">
+              <h5>Registration Time </h5>
+              <h4 className="mb-0">
+                {registrationTime ? registrationTime : 0}
+              </h4>
+            </div>
+          </div>
+        </div>
+
+        {/* Registration Start Time  */}
+        <div className="col-lg-4 col-md-6 col-sm-12 grid-margin">
+          <div className="card">
+            <div className="card-body">
+              <h5>Stake Time </h5>
+              <h4 className="mb-0">{stkTime ? stkTime : 0}</h4>
+            </div>
+          </div>
+        </div>
+        {/* Registration Start Time  */}
+        <div className="col-lg-4 col-md-6 col-sm-12 grid-margin">
+          <div className="card">
+            <div className="card-body">
+              <h5>Stake Capping </h5>
+              <h4 className="mb-0">{stkCapping ? stkCapping : 0}</h4>
+            </div>
+          </div>
+        </div>
+        {/* Stake  Month  */}
+        <div className="col-lg-4 col-md-6 col-sm-12 grid-margin">
+          <div className="card">
+            <div className="card-body">
+              <h5>Stake Month </h5>
+              <h4 className="mb-0">{stkMonths ? stkMonths : 0}</h4>
             </div>
           </div>
         </div>
@@ -611,8 +659,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5>User Topup Amount ID</h5>
-              <h4 className="mb-0">{topupAmount ? topupAmount : 0} USDT
-              </h4>
+              <h4 className="mb-0">{topupAmount ? topupAmount : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -630,8 +677,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5>User capping</h5>
-              <h4 className="mb-0">{capping ? capping : 0} USDT
-             </h4>
+              <h4 className="mb-0">{capping ? capping : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -640,8 +686,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5>Working income</h5>
-              <h4 className="mb-0">{income ? income : 0} USDT
-              </h4>
+              <h4 className="mb-0">{income ? income : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -650,8 +695,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5>Balance User ROI</h5>
-              <h4 className="mb-0">{rootBalance ? rootBalance : 0} USDT
-               </h4>
+              <h4 className="mb-0">{rootBalance ? rootBalance : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -660,8 +704,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5>User Assure 200% ROI </h5>
-              <h4 className="mb-0">{assuredReward ? assuredReward : 0} USDT
-              </h4>
+              <h4 className="mb-0">{assuredReward ? assuredReward : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -681,8 +724,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5>Income Taken</h5>
-              <h4 className="mb-0">{incomeTaken ? incomeTaken : 0} USDT
-              </h4>
+              <h4 className="mb-0">{incomeTaken ? incomeTaken : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -691,8 +733,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5>ROI Taken</h5>
-              <h4 className="mb-0">{takenROI ? takenROI : 0} USDT
-            </h4>
+              <h4 className="mb-0">{takenROI ? takenROI : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -731,8 +772,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5>Reward Win</h5>
-              <h4 className="mb-0">{rewardWin ? rewardWin : 0} USDT
-              </h4>
+              <h4 className="mb-0">{rewardWin ? rewardWin : 0} USDT</h4>
             </div>
           </div>
         </div>
@@ -859,7 +899,7 @@ const Dashboard = () => {
                         <option value="24">24</option>
                         <option value="36">36</option>
                         <option value="48">48</option>
-                        <option value="60">60</option>
+                        
                       </select>
                       {loading && (
                         <div className="loader-overlay">
@@ -888,7 +928,7 @@ const Dashboard = () => {
                 <div className="col-sm-12 my-auto">
                   <form
                     className="forms-sample"
-                    onSubmit={handleSubmitWithdraw}
+                    onSubmit={handleSubmitStakingWithdraw}
                   >
                     <div className="form-group w-100">
                       <input
@@ -902,23 +942,20 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        </div>
-             {/* WithDraw Staking Income  */}
-        <div className="col-sm-12 col-md-6 col-lg-6 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h5>WithDraw Staking Income</h5>
+              <h5>WithDraw Staking ROI</h5>
               <div className="row">
                 <div className="col-sm-12 my-auto">
                   <form
                     className="forms-sample"
-                    onSubmit={handleSubmitWithdrawStaking}
+                    onSubmit={handleSubmitWithdraw}
                   >
                     <div className="form-group w-100">
                       <input
                         className="btn mt-3 submitbtn_"
                         type="submit"
-                        value="Withdraw Staking Income"
+                        value="Withdraw Staking ROI"
                       />
                     </div>
                   </form>
@@ -927,8 +964,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>             
       </div>
     </div>
   );
