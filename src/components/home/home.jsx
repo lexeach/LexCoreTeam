@@ -104,7 +104,7 @@ const Dashboard = () => {
       claimAvailable = web3.utils.fromWei(claimAvailable, "ether");
       setClaimAvailable(roundToFour(claimAvailable));
       let claimTaken = await ICU_.methods.claimTaken(account[0]).call();
-      setClaimTaken(claimTaken);
+      setClaimTaken(roundToFour(claimTaken));
       let elibleClaim = await ICU_.methods
         .eligibleClaimPercentage(account[0])
         .call();
