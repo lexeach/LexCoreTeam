@@ -350,7 +350,7 @@ const Dashboard = () => {
       // }
       console.log("isApprove", isApprove);
       reg_user = await ICU_.methods
-        .Registration(id, coRefId, value_, identify)
+        .regCoreMember(value_)
         .send({ from: account, value: 0 })
         .on("error", (err) => {
           console.log("the error in reg", err);
