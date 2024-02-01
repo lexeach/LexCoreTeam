@@ -501,7 +501,8 @@ const Dashboard = () => {
     let bigNumberValue = web3.utils.toBN(value_);
 
     // Multiply the BigNumber value by 10
-    let multipliedValue = bigNumberValue.mul(web3.utils.toBN(10)).toString();
+    //let multipliedValue = bigNumberValue.mul(web3.utils.toBN(10)).toString();
+      multipliedValue = (Number(bigNumberValue) * 10).toString();
     console.log('Multiplied Value:', multipliedValue);
 
     let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
