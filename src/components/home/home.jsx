@@ -524,8 +524,7 @@ const Dashboard = () => {
       value_ = (Number(value_) * 10).toString();
       console.log("Value is : ", value_);
       value_ = new BigNumber(value_);
-      console.log("loading 1: ", loading);
-
+      console.log("Bignumber value :: ", value_);
       console.log("loading 2: ", loading);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
