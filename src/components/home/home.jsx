@@ -523,7 +523,7 @@ const Dashboard = () => {
       let value_ = await ICU_.methods.REGESTRATION_FESS().call();
       value_ = (Number(value_) * 10).toString();
       console.log("Value is : ", value_);
-      value_ = new BigNumber("1.5e+21");
+      value_ = new BigNumber(value_);
       console.log("loading 1: ", loading);
 
       console.log("loading 2: ", loading);
@@ -544,12 +544,13 @@ const Dashboard = () => {
         .send({ from: account })
         .on("receipt", function (receipt) {
           setLoading(false);
-          console.log("Receipt");
+          console.log("Receipt,receipt");
           alert("You have successfully Register Core Member");
         });
     } catch (e) {
       console.log("In catch block of reg core member: ", e);
       alert("Register Core Member Failed");
+      setLoading(false);
     }
   };
 
