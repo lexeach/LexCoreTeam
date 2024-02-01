@@ -496,27 +496,41 @@ const Dashboard = () => {
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
       let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-      value_ = (Number(value_) * 10).toString();
-        console.log("Multiplied Value: ", value_);
-      // console.log("Value: ", value_);
-      let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
+      
+    // Convert scientific notation string to BigNumber
+    let bigNumberValue = web3.utils.toBN(value_);
 
-      await USDT_.methods
-        .approve(ICU.address, value_)
-        .send({ from: account })
-        .on("error", console.error);
+    // Multiply the BigNumber value by 10
+    let multipliedValue = bigNumberValue.mul(web3.utils.toBN(10)).toString();
+    console.log('Multiplied Value:', multipliedValue);
 
-      await ICU_.methods.regCoreMember(value_).send({ from: account });
-    } catch (e) {
-      console.log("In catch block of reg core member: ", e);
-    }
-  };
-  const takeClaimCon = async () => {
-    try {
-      let TakeCl = new web3.eth.Contract(ClaimLXC.ABI, ClaimLXC.address);
-      await TakeCl.methods.takeClaim().send({ from: account });
-    } catch (e) {}
-  };
+    let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
+
+    // Approve transaction
+    await USDT_.methods
+      .approve(ICU.address, multipliedValue)
+      .send({ from: account })
+      .on("transactionHash", (hash) => console.log("Approval Transaction Hash:", hash))
+      .on("error", (error) => {
+        console.error("Error during approve transaction:", error);
+        throw new Error("Failed to approve transaction");
+      });
+
+    // Register Core Member transaction
+    await ICU_.methods
+      .regCoreMember(multipliedValue)
+      .send({ from: account })
+      .on("transactionHash", (hash) => console.log("Registration Transaction Hash:", hash))
+      .on("error", (error) => {
+        console.error("Error during registration transaction:", error);
+        throw new Error("Failed to register as Core Member");
+      });
+
+    console.log("Registration successful!");
+  } catch (e) {
+    console.log("In catch block of reg core member: ", e);
+  }
+};
 
   const showModal = () => {
     setIsModalOpen(true);
