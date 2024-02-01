@@ -496,7 +496,7 @@ const Dashboard = () => {
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
       let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-      value_ = (Number(value_)* 10).toString();
+      value_ = (Number(value_) * 10).toString();
         console.log('Multiplied Value:', value_);
       // console.log("Value: ", value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
