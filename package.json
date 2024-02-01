@@ -14,6 +14,7 @@
     "antd": "^5.2.1",
     "assert": "^2.0.0",
     "axios": "^1.2.0",
+    "bignumber.js": "^9.1.2",
     "bootstrap": "^5.2.3",
     "compass-mixins": "^0.12.12",
     "http": "^0.0.1-security",

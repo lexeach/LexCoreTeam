@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ThreeCircles } from "react-loader-spinner";
 import { Button, Modal } from "antd";
+import BigNumber from "bignumber.js";
 
 import abiDecoder from "abi-decoder";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
@@ -46,6 +47,7 @@ const Dashboard = () => {
   const [nextReward, setNetxtReward] = useState();
 
   const [userAc, setUserAc] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const [coreID, setCoreID] = useState();
   const [coreReferrerID, setCoreReferrerID] = useState();
@@ -60,6 +62,8 @@ const Dashboard = () => {
   const [claimAvailableClaim, setClaimAvailableClaim] = useState();
   const [claimTakenClaim, setClaimTakenClaim] = useState();
   const [coreUserExist, setCoreUserExist] = useState();
+
+  const [testData, setTestData] = useState(false);
 
   //////////////////////////////////
   const location = useLocation().search;
@@ -403,6 +407,9 @@ const Dashboard = () => {
       isApprove = await USDT_.methods
         .approve(ICU.address, value_)
         .send({ from: account })
+        .on("receipt", function (receipt) {
+          console.log("recept: ", receipt);
+        })
         .on("error", console.error);
       console.log("is approved after asss allownce");
 
@@ -429,7 +436,6 @@ const Dashboard = () => {
       let approve = await BEP20_.methods
         .approve(ICU.address, value_)
         .send({ from: account });
-      // .on("error", console.error);
       console.log("the approve response", approve);
       console.log("the value out of status", value_);
       if (approve.status === true) {
@@ -490,48 +496,69 @@ const Dashboard = () => {
     } catch (e) {}
   };
 
+  // async function scientificToInteger(scientificNotation) {
+  //   // Parse the scientific notation using a regular expression
+  //   const match = scientificNotation.match(/^(\d+(\.\d+)?)(e(\+|-)?(\d+))?$/);
+  //   if (!match) {
+  //     throw new Error("Invalid scientific notation");
+  //   }
+
+  //   // Extract the coefficient and the exponent parts
+  //   const coefficient = parseFloat(match[1]); // Parse the coefficient as a floating point number
+  //   const exponent = match[5] ? parseInt(match[5]) : 0; // Parse the exponent as an integer, default to 0 if not provided
+
+  //   // Calculate the equivalent integer
+  //   const equivalentInteger = coefficient * Math.pow(10, exponent);
+  //   return equivalentInteger;
+  // }
+
   const regCoreMember = async () => {
     // event.preventDefault();
     try {
+      setLoading(true);
+      console.log("Loading set true: ", loading);
+
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
       let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-      
-    // Convert scientific notation string to BigNumber
-    let bigNumberValue = web3.utils.toBN(value_);
+      value_ = (Number(value_) * 10).toString();
+      console.log("Value is : ", value_);
+      value_ = new BigNumber("1.5e+21");
+      console.log("loading 1: ", loading);
 
-    // Multiply the BigNumber value by 10
-    //let multipliedValue = bigNumberValue.mul(web3.utils.toBN(10)).toString();
-      multipliedValue = (Number(bigNumberValue) * 10).toString();
-    console.log('Multiplied Value:', multipliedValue);
+      console.log("loading 2: ", loading);
+      let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
+      await USDT_.methods
+        .approve(ICU.address, value_)
+        .send({ from: account })
+        .on("receipt", function (receipt) {
+          setLoading(false);
+        })
+        .on("error", function (error) {
+          setLoading(false);
+          console.log(error);
+        });
 
-    let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
+      await ICU_.methods
+        .regCoreMember(value_)
+        .send({ from: account })
+        .on("receipt", function (receipt) {
+          setLoading(false);
+          console.log("Receipt");
+          alert("You have successfully Register Core Member");
+        });
+    } catch (e) {
+      console.log("In catch block of reg core member: ", e);
+      alert("Register Core Member Failed");
+    }
+  };
 
-    // Approve transaction
-    await USDT_.methods
-      .approve(ICU.address, multipliedValue)
-      .send({ from: account })
-      .on("transactionHash", (hash) => console.log("Approval Transaction Hash:", hash))
-      .on("error", (error) => {
-        console.error("Error during approve transaction:", error);
-        throw new Error("Failed to approve transaction");
-      });
-
-    // Register Core Member transaction
-    await ICU_.methods
-      .regCoreMember(multipliedValue)
-      .send({ from: account })
-      .on("transactionHash", (hash) => console.log("Registration Transaction Hash:", hash))
-      .on("error", (error) => {
-        console.error("Error during registration transaction:", error);
-        throw new Error("Failed to register as Core Member");
-      });
-
-    console.log("Registration successful!");
-  } catch (e) {
-    console.log("In catch block of reg core member: ", e);
-  }
-};
+  const takeClaimCon = async () => {
+    try {
+      let TakeCl = new web3.eth.Contract(ClaimLXC.ABI, ClaimLXC.address);
+      await TakeCl.methods.takeClaim().send({ from: account });
+    } catch (e) {}
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -831,6 +858,10 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h6>Reg Core Member</h6>
+
+              {loading && (
+                <div className="loader-overlay"> Transaction is Approving </div>
+              )}
               <button onClick={regCoreMember}>Reg Core Member</button>
             </div>
           </div>
