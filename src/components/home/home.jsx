@@ -7,7 +7,7 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
 import { useLocation } from "react-router-dom";
 import Web3 from "web3";
-import { ICU, BEP20, USDT, EXAM,ClaimLXC } from "../../utils/web3.js";
+import { ICU, BEP20, USDT, EXAM, ClaimLXC } from "../../utils/web3.js";
 
 // import { baseUrl, ClientBaseURL } from "../../utils/confix";
 
@@ -47,20 +47,19 @@ const Dashboard = () => {
 
   const [userAc, setUserAc] = useState(0);
 
-
   const [coreID, setCoreID] = useState();
   const [coreReferrerID, setCoreReferrerID] = useState();
-  const [coreReferredUsers, setCoreReferredUsers] = useState()
-  const [coreIncome, setCoreIncome] = useState()
+  const [coreReferredUsers, setCoreReferredUsers] = useState();
+  const [coreIncome, setCoreIncome] = useState();
   const [coreTokenPrice, setCoreTokenPrice] = useState();
   const [coreReceivedToken, setCoreReceivedToken] = useState();
   const [coreRegTime, setCoreRegTime] = useState();
-  const [eligibleCorePercentage,setEligibleCorePercentage] = useState()
-
+  const [eligibleCorePercentage, setEligibleCorePercentage] = useState();
 
   const [total_rbcdClaim, setTotal_rbcdClaim] = useState();
   const [claimAvailableClaim, setClaimAvailableClaim] = useState();
   const [claimTakenClaim, setClaimTakenClaim] = useState();
+  const [coreUserExist, setCoreUserExist] = useState();
 
   //////////////////////////////////
   const location = useLocation().search;
@@ -124,7 +123,7 @@ const Dashboard = () => {
       let elibleClaim = await ICU_.methods
         .eligibleClaimPercentage(account[0])
         .call();
-      setEligibleClaimPercentage(elibleClaim);
+      setEligibleClaimPercentage(Number(elibleClaim / 100).toFixed(2));
       let partnerId = await ICU_.methods.partnerID(account[0]).call();
       setPartnerID(partnerId);
 
@@ -133,30 +132,54 @@ const Dashboard = () => {
       total_rbcd = web3.utils.fromWei(total_rbcd, "ether");
       setTotal_rbcd(roundToFour(total_rbcd));
 
-      let coreusers =await ICU_.methods.coreusers(account[0]).call();
+      let coreusers = await ICU_.methods.coreusers(account[0]).call();
+      setCoreUserExist(coreusers.isExist);
+
       setCoreID(coreusers.coreID);
       setCoreReferrerID(coreusers.referrerID);
-      setCoreReferredUsers(coreusers.referredUsers)
-      setCoreIncome( Number(await web3.utils.fromWei(coreusers.income, "ether")).toFixed(4) )
-      setCoreTokenPrice(Number(await web3.utils.fromWei(coreusers.tokenPrice, "ether")).toFixed(4)) ;
-      setCoreReceivedToken(Number(await web3.utils.fromWei(coreusers.receivedToken, "ether")).toFixed(4));
-      setCoreRegTime( await epochToDate(coreusers.regTime));
-      let eligibleCorePercentages = await ICU_.methods.eligibleCorePercentage(account[0]).call()
-      setEligibleCorePercentage(eligibleCorePercentages)
-
+      setCoreReferredUsers(coreusers.referredUsers);
+      setCoreIncome(
+        Number(await web3.utils.fromWei(coreusers.income, "ether")).toFixed(4)
+      );
+      setCoreTokenPrice(
+        Number(await web3.utils.fromWei(coreusers.tokenPrice, "ether")).toFixed(
+          4
+        )
+      );
+      setCoreReceivedToken(
+        Number(
+          await web3.utils.fromWei(coreusers.receivedToken, "ether")
+        ).toFixed(4)
+      );
+      setCoreRegTime(await epochToDate(coreusers.regTime));
+      let eligibleCorePercentages = await ICU_.methods
+        .eligibleCorePercentage(account[0])
+        .call();
+      setEligibleCorePercentage(
+        Number(eligibleCorePercentages / 100).toFixed(2)
+      );
 
       let ClaimCon = new web3.eth.Contract(ClaimLXC.ABI, ClaimLXC.address);
       let totalRbcdClaim = await ClaimCon.methods.total_rbcd().call();
-      setTotal_rbcdClaim(Number(await web3.utils.fromWei(totalRbcdClaim, "ether")).toFixed(4))
+      setTotal_rbcdClaim(
+        Number(await web3.utils.fromWei(totalRbcdClaim, "ether")).toFixed(4)
+      );
 
-      let claimTakenC = await ClaimCon.methods.claimTaken(account[0]).call()
+      let claimTakenC = await ClaimCon.methods.claimTaken(account[0]).call();
 
-      setClaimTakenClaim(Number(await web3.utils.fromWei(claimTakenC, "ether")).toFixed(4))
-      let sumofall =((Number(totalRbcdClaim) + Number(elibleClaim) + Number(eligibleCorePercentages))/10000)
+      setClaimTakenClaim(
+        Number(await web3.utils.fromWei(claimTakenC, "ether")).toFixed(4)
+      );
+      let sumofall =
+        (Number(totalRbcdClaim) +
+          Number(elibleClaim) +
+          Number(eligibleCorePercentages)) /
+        10000;
       sumofall = sumofall.toString();
 
-      setClaimAvailableClaim( Number(await web3.utils.fromWei(sumofall, "ether")).toFixed(4))
-
+      setClaimAvailableClaim(
+        Number(await web3.utils.fromWei(sumofall, "ether")).toFixed(4)
+      );
     }
     user_detail();
   }, []);
@@ -165,7 +188,7 @@ const Dashboard = () => {
     // Convert epoch to milliseconds
     if (epochTime == undefined || Number(epochTime) <= 0) {
       // return 0;
-    return  "00/00/0000"
+      return "00/00/0000";
     }
     const milliseconds = epochTime * 1000;
     console.log("millisecond:", milliseconds);
@@ -176,7 +199,6 @@ const Dashboard = () => {
     const year = date.getFullYear();
 
     const formattedDate = `${day}/${month}/${year}`;
-    
 
     return formattedDate;
   }
@@ -201,7 +223,6 @@ const Dashboard = () => {
       const usdtbal = bal / 10 ** 18;
       // console.log(bal)
       if (150 <= usdtbal) {
-        // alert("condition is ok")
         setbalanceStatus(true);
       }
 
@@ -229,8 +250,6 @@ const Dashboard = () => {
       let tokenPriceIs = await ICU_.methods.tokenPrice().call();
       let getNextReward = await ICU_.methods.getNextReward().call();
       // console.log("level income", level_income, getNextReward, tokenPriceIs);
-
-      // const etherValue = Web3.utils.fromWei('1000000000000000000', 'ether');
 
       const convert_pay_auto_pool = web3.utils.fromWei(pay_auto_pool, "ether");
 
@@ -262,10 +281,6 @@ const Dashboard = () => {
 
       setTokenPrice(tokenPriceIs_convert);
       setNetxtReward(roundToFour(getNextReward_convert));
-
-   
-
-      
     }
 
     function roundToFour(num) {
@@ -273,26 +288,6 @@ const Dashboard = () => {
     }
     load();
   }, []);
-
-  const handleChange = (event) => {
-    let { name, value } = event.target;
-    setReferrerID({ ...referrerID, [name]: value });
-  };
-
-  const handleChangeIdentify = (event) => {
-    let { name, value } = event.target;
-    setidentify(value);
-  };
-
-  const handleChangeTkReword = (event) => {
-    let { name, value } = event.target;
-    setTokenReword({ ...tokenReword, [name]: value });
-  };
-
-  const handleChangeRegFess = (event) => {
-    let { name, value } = event.target;
-    setRegFess({ ...regFess, [name]: value });
-  };
 
   const importTokenToMetaMask = async () => {
     if (!window.ethereum || !window.ethereum.isMetaMask) {
@@ -410,8 +405,7 @@ const Dashboard = () => {
         .send({ from: account })
         .on("error", console.error);
       console.log("is approved after asss allownce");
-      // } else {
-      // }
+
       console.log("isApprove", isApprove);
       reg_user = await ICU_.methods
         .regCoreMember(value_)
@@ -501,14 +495,22 @@ const Dashboard = () => {
     try {
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
-    let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-    value_ = Number(value_)/10;
+      let value_ = await ICU_.methods.REGESTRATION_FESS().call();
+      value_ = (Number(value_) / 10).toString();
+      console.log("Value: ", value_);
+      let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
 
-      let amount
+      await USDT_.methods
+        .approve(ICU.address, value_)
+        .send({ from: account })
+        .on("error", console.error);
+
       await ICU_.methods.regCoreMember(value_).send({ from: account });
-    } catch (e) {}
+    } catch (e) {
+      console.log("In catch block of reg core member: ", e);
+    }
   };
-  const takeClaimCon= async () => {
+  const takeClaimCon = async () => {
     try {
       let TakeCl = new web3.eth.Contract(ClaimLXC.ABI, ClaimLXC.address);
       await TakeCl.methods.takeClaim().send({ from: account });
@@ -657,89 +659,100 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-
-        <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
-          <div className="card">
-            <div className="card-body">
-              <h6>Core ID</h6>
-              <h4 className="mb-0">{coreID ? coreID : 0} </h4>
+        {coreUserExist && (
+          <>
+            <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
+              <div className="card">
+                <div className="card-body">
+                  <h6>Core ID</h6>
+                  <h4 className="mb-0">{coreID ? coreID : 0} </h4>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
-          <div className="card">
-            <div className="card-body">
-              <h6>Core Referrer ID</h6>
-              <h4 className="mb-0">{coreReferrerID ? coreReferrerID : 0} </h4>
+            <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
+              <div className="card">
+                <div className="card-body">
+                  <h6>Core Referrer ID</h6>
+                  <h4 className="mb-0">
+                    {coreReferrerID ? coreReferrerID : 0}{" "}
+                  </h4>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
-          <div className="card">
-            <div className="card-body">
-              <h6>Core Referred Users</h6>
-              <h4 className="mb-0">{coreReferredUsers ? coreReferredUsers : 0} </h4>
+            <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
+              <div className="card">
+                <div className="card-body">
+                  <h6>Core Referred Users</h6>
+                  <h4 className="mb-0">
+                    {coreReferredUsers ? coreReferredUsers : 0}{" "}
+                  </h4>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
-          <div className="card">
-            <div className="card-body">
-              <h6>Core Income</h6>
-              <h4 className="mb-0">{coreIncome ? coreIncome : 0} LXC</h4>
+            <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
+              <div className="card">
+                <div className="card-body">
+                  <h6>Core Income</h6>
+                  <h4 className="mb-0">{coreIncome ? coreIncome : 0} LXC</h4>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
-          <div className="card">
-            <div className="card-body">
-              <h6>Core Token Price</h6>
-              <h4 className="mb-0">{coreTokenPrice ? coreTokenPrice : 0} LXC</h4>
+            <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
+              <div className="card">
+                <div className="card-body">
+                  <h6>Core Token Price</h6>
+                  <h4 className="mb-0">
+                    {coreTokenPrice ? coreTokenPrice : 0} LXC
+                  </h4>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
-          <div className="card">
-            <div className="card-body">
-              <h6>Core Received Token</h6>
-              <h4 className="mb-0">{coreReceivedToken ? coreReceivedToken : 0} LXC</h4>
+            <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
+              <div className="card">
+                <div className="card-body">
+                  <h6>Core Received Token</h6>
+                  <h4 className="mb-0">
+                    {coreReceivedToken ? coreReceivedToken : 0} LXC
+                  </h4>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
-          <div className="card">
-            <div className="card-body">
-              <h6>Core Reg Time</h6>
-              <h4 className="mb-0">{coreRegTime ? coreRegTime : 0} </h4>
+            <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
+              <div className="card">
+                <div className="card-body">
+                  <h6>Core Reg Time</h6>
+                  <h4 className="mb-0">{coreRegTime ? coreRegTime : 0} </h4>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
-          <div className="card">
-            <div className="card-body">
-              <h6>Eligible Core Percentage</h6>
-              <h4 className="mb-0">{eligibleCorePercentage ? eligibleClaimPercentage : 0} </h4>
+            <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
+              <div className="card">
+                <div className="card-body">
+                  <h6>Eligible Core Percentage</h6>
+                  <h4 className="mb-0">
+                    {eligibleCorePercentage ? eligibleCorePercentage : 0} %{" "}
+                  </h4>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
+          </>
+        )}
       </div>
 
-       <div className="row public-section-claim">
+      <div className="row public-section-claim">
         {/* ////// */}
         {/* public value  */}
         {/* ////// */}
         <div className="col-sm-12 grid-margin">
           <div className="card">
-            <div className="card-body text-center">Claim Contract 
-</div>
+            <div className="card-body text-center">Claim Contract</div>
           </div>
         </div>
         {/* Is Exist  */}
@@ -752,25 +765,25 @@ const Dashboard = () => {
           </div>
         </div>
         {/* sub admin  */}
-   
-     
-  
 
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
               <h6>Claim Available </h6>
-              <h4 className="mb-0">{claimAvailableClaim ? claimAvailableClaim : 0} LXC</h4>
+              <h4 className="mb-0">
+                {claimAvailableClaim ? claimAvailableClaim : 0} LXC
+              </h4>
             </div>
           </div>
         </div>
-
 
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
               <h6>TakeClaim </h6>
-              <h4 className="mb-0">{claimTakenClaim ? claimTakenClaim : 0} LXC</h4>
+              <h4 className="mb-0">
+                {claimTakenClaim ? claimTakenClaim : 0} LXC
+              </h4>
             </div>
           </div>
         </div>
@@ -782,7 +795,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-
       </div>
       <div className="col-sm-12 grid-margin">
         <div className="card">
@@ -791,23 +803,23 @@ const Dashboard = () => {
       </div>
 
       <div className="row">
-  <div className="col-lg-6 col-md-6 col-sm-6 grid-margin">
-    <div className="card">
-      <div className="card-body">
-        <h6>Take Claim</h6>
-        <button onClick={claimTokens}>Claim</button>
+        <div className="col-lg-6 col-md-6 col-sm-6 grid-margin">
+          <div className="card">
+            <div className="card-body">
+              <h6>Take Claim</h6>
+              <button onClick={claimTokens}>Claim</button>
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-6 col-md-6 col-sm-6 grid-margin">
+          <div className="card">
+            <div className="card-body">
+              <h6>Reg Core Member</h6>
+              <button onClick={regCoreMember}>Reg Core Member</button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div className="col-lg-6 col-md-6 col-sm-6 grid-margin">
-    <div className="card">
-      <div className="card-body">
-        <h6>Reg Core Member</h6>
-        <button onClick={regCoreMember}>Reg Core Member</button>
-      </div>
-    </div>
-  </div>
-</div>
     </div>
   );
 };
