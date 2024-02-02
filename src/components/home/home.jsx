@@ -147,7 +147,7 @@ const Dashboard = () => {
       );
       setCoreTokenPrice(
         Number(await web3.utils.fromWei(coreusers.tokenPrice, "ether")).toFixed(
-          4
+          6
         )
       );
       setCoreReceivedToken(
