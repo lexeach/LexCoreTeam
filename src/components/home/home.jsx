@@ -175,8 +175,8 @@ const Dashboard = () => {
         Number(await web3.utils.fromWei(claimTakenC, "ether")).toFixed(4)
       );
       let sumofall =
-        Number(totalRbcdClaim) *
-          (Number(elibleClaim) +
+        (Number(totalRbcdClaim) +
+          Number(elibleClaim) +
           Number(eligibleCorePercentages)) /
         10000;
       sumofall = sumofall.toString();
@@ -239,6 +239,7 @@ const Dashboard = () => {
 
       setBalance(roundToFour(etherValue));
       setAccount(accounts[0]);
+      console.log("accounts: ", account[0], account);
       let BEP20_ = new web3.eth.Contract(BEP20.ABI, BEP20.address);
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
 
@@ -511,25 +512,35 @@ const Dashboard = () => {
   //   const equivalentInteger = coefficient * Math.pow(10, exponent);
   //   return equivalentInteger;
   // }
+  async function scientificToInteger(scientificNotation) {
+    const [coefficient, exponent] = scientificNotation.split("e");
+    const decimalValue = parseFloat(coefficient);
+    const integerPart = Math.floor(decimalValue);
+    const fractionalPart = decimalValue - integerPart;
+    let stringValue = integerPart.toString();
+    const splitArray = scientificNotation.split("e+");
+    const decimalPlaces = splitArray[1];
+    stringValue += fractionalPart.toFixed(decimalPlaces).slice(2);
+    console.log("String Value: ", stringValue);
+    return stringValue;
+  }
 
   const regCoreMember = async () => {
     // event.preventDefault();
     try {
       setLoading(true);
       console.log("Loading set true: ", loading);
+      const accounts = await web3.eth.requestAccounts();
 
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
       let value_ = await ICU_.methods.REGESTRATION_FESS().call();
       value_ = (Number(value_) * 10).toString();
-      console.log("Value is : ", value_);
-      value_ = new BigNumber(value_);
-      console.log("Bignumber value :: ", value_);
-      console.log("loading 2: ", loading);
+      value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
-        .send({ from: account })
+        .send({ from: accounts[0] })
         .on("receipt", function (receipt) {
           setLoading(false);
         })
@@ -540,7 +551,7 @@ const Dashboard = () => {
 
       await ICU_.methods
         .regCoreMember(value_)
-        .send({ from: account })
+        .send({ from: accounts[0] })
         .on("receipt", function (receipt) {
           setLoading(false);
           console.log("Receipt,receipt");
