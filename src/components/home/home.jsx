@@ -569,7 +569,7 @@ const Dashboard = () => {
                 <div className="card-body">
                   <h6>Core Token Price</h6>
                   <h4 className="mb-0">
-                    {coreTokenPrice ? coreTokenPrice : 0} LXC
+                    {coreTokenPrice ? coreTokenPrice : 0} USDT
                   </h4>
                 </div>
               </div>
