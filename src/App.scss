@@ -252,3 +252,20 @@ a {
   font-size: 24px;
   font-weight: bold;
 }
+
+.card-sp {
+  margin: 15px;
+  border: none;
+  // border-radius: 0px 83px;
+  text-align: center;
+  box-shadow: 16px 17px 3px 0 rgb(0 0 0 / 50%);
+
+  .card-body {
+    border: none;
+    color: #ffffff;
+    padding: 1.75rem 1.5625rem;
+    background: rgba(41, 198, 230, 0.78) !important;
+    // border-radius: 0px 63px;
+    border-radius: 5px;
+  }
+}
