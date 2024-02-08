@@ -1,6 +1,6 @@
 module.exports = {
   ICU: {
-    address: "0x57274ff68afe7e8e6ae8ae59f4e10b131dcfe219",
+    address: "0x219a47BdF07f6a15830d9fd861304b6351c7bf48",
     ABI: [
       {
         inputs: [
@@ -1421,7 +1421,7 @@ module.exports = {
     ],
   },
   EXAM: {
-    address: "0xc2D76Be1Fc9283058e6f22f3d1D9FDd63887e255",
+    address: "0x57da19eEDC3bAb7DbAD5d83D784696AFc12dC067",
     ABI: [
       { inputs: [], stateMutability: "nonpayable", type: "constructor" },
       {
