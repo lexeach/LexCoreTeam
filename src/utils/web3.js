@@ -1428,7 +1428,7 @@ module.exports = {
         inputs: [
           { internalType: "address", name: "_student", type: "address" },
         ],
-        name: "isQualified",
+        name: "isPass",
         outputs: [{ internalType: "bool", name: "", type: "bool" }],
         stateMutability: "view",
         type: "function",
