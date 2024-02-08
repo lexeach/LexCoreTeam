@@ -1529,7 +1529,7 @@ module.exports = {
     ],
   },
   ClaimLXC: {
-    address: "0x912265d93b95990e82fa7f5f8a8995b1ccc0c6d7",
+    address: "0x698C516Ab0F4Dc49785C32BAa1c0b1CE057Edb61",
     ABI: [
       {
         inputs: [
