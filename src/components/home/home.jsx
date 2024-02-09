@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useLocation } from "react-router-dom";
 import Web3 from "web3";
-import { ICU, BEP20, USDT, EXAM, ClaimLXC } from "../../utils/web3.js";
+import { ICU, BEP20, USDT, EXAM, FootPrint, ClaimLXC } from "../../utils/web3.js";
 const Dashboard = () => {
   const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
   const [account, setAccount] = useState();
