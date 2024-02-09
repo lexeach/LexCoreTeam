@@ -103,7 +103,8 @@ const Dashboard = () => {
         Number(eligibleCorePercentages / 100).toFixed(2)
       );
       let ClaimCon = new web3.eth.Contract(ClaimLXC.ABI, ClaimLXC.address);
-      let totalRbcdClaim = await ClaimCon.methods.total_rbcd().call();
+      let FootPrnt = new web3.eth.Contract(FootPrint.ABI, FootPrint.address);
+      let totalRbcdClaim = await FootPrnt.methods.totalRBCD().call();
       setTotal_rbcdClaim(
         Number(await web3.utils.fromWei(totalRbcdClaim, "ether")).toFixed(4)
       );
@@ -114,9 +115,9 @@ const Dashboard = () => {
         Number(await web3.utils.fromWei(claimTakenC, "ether")).toFixed(4)
       );
       let sumofall =
-        (Number(totalRbcdClaim) +
-          Number(elibleClaim) +
-          Number(eligibleCorePercentages)) /
+        (Number(totalRbcdClaim) *
+          (Number(elibleClaim) +
+          Number(eligibleCorePercentages))) /
         10000;
       sumofall = sumofall.toString();
 
