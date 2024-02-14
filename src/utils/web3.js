@@ -1,6 +1,6 @@
 module.exports = {
   ICU: {
-    address: "0x219a47BdF07f6a15830d9fd861304b6351c7bf48",
+    address: "0xcE61b2753DeBd2050EF7bACFA072Efe1937F993E",
     ABI: [
       {
         inputs: [
