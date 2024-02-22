@@ -361,11 +361,8 @@ const Dashboard = () => {
       console.log("accoutn", account);
       let value_ = await ICU_.methods.REGESTRATION_FESS().call();
       let tax = await ICU_.methods.taxRate().call();
-      const valueBigInt = BigInt(value_);
-      const taxBigInt = BigInt(tax);
-      const newValue = valueBigInt * 10n + ((valueBigInt * 10n * taxBigInt) / 100n);
-      value_ = newValue.toString();
-
+      value_ = (Number(value_) * 10 + ((Number(value_) * 10) * Number(tax) / 100 )).toString();
+      value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
