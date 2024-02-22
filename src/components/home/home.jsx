@@ -360,15 +360,21 @@ const Dashboard = () => {
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
       let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-      let tax = await ICU_.methods.taxRate().call();
-      let registrationFee = BigInt(value_);
-      let taxRate = BigInt(tax);
-      let total =  (registrationFee * 10 + ((registrationFee * 10) * taxRate / 100 ));
+let tax = await ICU_.methods.taxRate().call();
 
-      // Convert the result back to a string
-      value_ = total.toString();
-      //value_ = (registrationFee * 10 + ((registrationFee * 10) * taxRate / 100 ));
-      value_ = await scientificToInteger(value_);
+// Convert the values to BigInt
+let registrationFee = BigInt(value_);
+let taxRate = BigInt(tax);
+
+// Perform integer arithmetic
+let total = registrationFee * BigInt(10) + ((registrationFee * BigInt(10) * taxRate) / BigInt(100));
+
+// Convert the result back to a string
+value_ = total.toString();
+
+// Ensure precision using BigInt
+value_ = await scientificToInteger(value_);
+
       
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
