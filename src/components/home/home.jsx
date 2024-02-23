@@ -359,13 +359,15 @@ const Dashboard = () => {
       const accounts = await web3.eth.requestAccounts();
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
+      const BigNumber = require('bignumber.js');
      let value_ = await ICU_.methods.REGESTRATION_FESS().call();
 let tax = await ICU_.methods.taxRate().call();
 
 // Apply tax rate to value_
 value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
-      let valueNew = Number(value_);
-value_ = (Number(valueNew) * 10).toString();
+      value_ = new BigNumber(value_);
+     // let valueNew = Number(value_);
+value_ = (Number(value_) * 10).toString();
 // Multiply the result by 10
 //let valueNew = Number(value_) * 10;
 
