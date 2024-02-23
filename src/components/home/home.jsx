@@ -370,7 +370,7 @@ const Dashboard = () => {
      // Apply tax rate to value_
       value_ = value_.plus(value_.times(tax).dividedBy(100)).toString();
      // value_ = new BigNumber(value_);
-      //value_ = value_.toString();
+      value_ = value_.toString();
        
       // Convert to integer using scientificToInteger function
       value_ = await scientificToInteger(value_);
