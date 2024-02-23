@@ -368,9 +368,9 @@ const Dashboard = () => {
 
      // Apply tax rate to value_
       value_ = value_.plus(value_.times(tax).dividedBy(100)).toString();
-     // value_ = new BigNumber(value_);
+      value_ = new BigNumber(value_);
       value_ = value_.times(10).toString();
-       value_ = new BigNumber(value_);
+       
       // Convert to integer using scientificToInteger function
       value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
