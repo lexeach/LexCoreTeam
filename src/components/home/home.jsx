@@ -366,10 +366,10 @@ let tax = await ICU_.methods.taxRate().call();
 value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
 
 // Multiply the result by 10
-let valueNew = Number(value_) * 10;
+value_ = (Number(value_) * 10).toString();
 
 // Convert to integer using scientificToInteger function
-value_ = await scientificToInteger(valueNew);
+value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
