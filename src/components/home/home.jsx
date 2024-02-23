@@ -363,6 +363,7 @@ const Dashboard = () => {
      let value_ = await ICU_.methods.REGESTRATION_FESS().call();
      let tax = await ICU_.methods.taxRate().call();
 
+      // Convert value and tax to bignumber
      value_ = new BigNumber(value_);
      tax = new BigNumber(tax);
 
