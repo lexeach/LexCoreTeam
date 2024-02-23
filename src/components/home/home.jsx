@@ -360,19 +360,23 @@ const Dashboard = () => {
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
       const BigNumber = require('bignumber.js');
-     let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-     let tax = await ICU_.methods.taxRate().call();
 
-     value_ = new BigNumber(value_);
-     tax = new BigNumber(tax);
+let value_ = await ICU_.methods.REGESTRATION_FESS().call();
+let tax = await ICU_.methods.taxRate().call();
 
-     // Apply tax rate to value_
-      value_ = value_.times(10).plus(value_.times(10).times(tax).dividedBy(100)).toString();
-     // value_ = new BigNumber(value_);
-     // value_ = value_.times(10).toString();
-       
-      // Convert to integer using scientificToInteger function
-      value_ = await scientificToInteger(value_);
+// Convert value_ and tax to BigNumber
+value_ = new BigNumber(value_);
+tax = new BigNumber(tax);
+
+// Apply tax rate to value_ and round to nearest integer
+value_ = value_.times(tax.plus(100)).dividedBy(100).integerValue(BigNumber.ROUND_HALF_UP).toString();
+
+// Multiply the result by 10 using BigNumber
+value_ = value_.times(10).integerValue(BigNumber.ROUND_HALF_UP).toString();
+
+// Convert to integer using scientificToInteger function
+value_ = await scientificToInteger(value_);
+
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
