@@ -364,7 +364,8 @@ let tax = await ICU_.methods.taxRate().call();
 
 // Apply tax rate to value_
 value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
-value_ = (Number(value_) * 10).toString();
+      let valueNew = Number(value_);
+value_ = (Number(valueNew) * 10).toString();
 // Multiply the result by 10
 //let valueNew = Number(value_) * 10;
 
