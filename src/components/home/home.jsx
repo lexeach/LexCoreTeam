@@ -367,7 +367,8 @@ let tax = await ICU_.methods.taxRate().call();
 value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
       value_ = new BigNumber(value_);
      // let valueNew = Number(value_);
-value_ = (BigNumber(value_) * 10).toString();
+      value_ = value_.times(10).toString();
+//value_ = (BigNumber(value_) * 10).toString();
 // Multiply the result by 10
 //let valueNew = Number(value_) * 10;
 
