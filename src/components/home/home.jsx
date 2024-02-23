@@ -361,20 +361,22 @@ const Dashboard = () => {
       console.log("accoutn", account);
     const BigNumber = require('bignumber.js');
 
-    let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-    let tax = await ICU_.methods.taxRate().call();
+let value_ = await ICU_.methods.REGESTRATION_FESS().call();
+let tax = await ICU_.methods.taxRate().call();
 
+// Convert value_ and tax to BigNumber
+value_ = new BigNumber(value_);
+tax = new BigNumber(tax);
 
 // Apply tax rate to value_
 value_ = value_.plus(value_.times(tax).dividedBy(100)).toString();
 
 // Multiply the result by 10 using BigNumber
 value_ = value_.times(10).toString();
-// Convert value_ to BigNumber
-    value_ = new BigNumber(value_);
 
 // Convert to integer using scientificToInteger function
-   value_ = await scientificToInteger(value_);
+value_ = await scientificToInteger(value_);
+
    
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
