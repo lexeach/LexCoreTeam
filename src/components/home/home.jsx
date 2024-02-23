@@ -364,11 +364,11 @@ const Dashboard = () => {
     let value_ = await ICU_.methods.REGESTRATION_FESS().call();
     let tax = await ICU_.methods.taxRate().call();
 
-// Convert value_ to BigNumber
-    value_ = new BigNumber(value_);
 
 // Apply tax rate to value_
 value_ = value_.plus(value_.times(tax).dividedBy(100)).toString();
+// Convert value_ to BigNumber
+    value_ = new BigNumber(value_);
 
 // Multiply the result by 10 using BigNumber
 value_ = value_.times(10).toString();
