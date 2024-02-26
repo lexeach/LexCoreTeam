@@ -370,11 +370,11 @@ const Dashboard = () => {
 
     // Apply tax rate to value_
     // Multiply the result by 10 using BigNumber and round up
-    value_ = value_.times(10).integerValue(BigNumber.ROUND_CEIL);
-
+    value_ = value_.times(tax.plus(100)).dividedBy(100);
+    
 
     // Multiply the result by 10 using BigNumber
-    value_ = value_.times(10).integerValue(BigNumber.ROUND_HALF_UP);
+    value_ = value_.times(10).integerValue(BigNumber.ROUND_CEIL);
 
     // Convert to integer using scientificToInteger function
     value_ = await scientificToInteger(value_.toString());
