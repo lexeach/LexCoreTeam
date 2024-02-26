@@ -377,20 +377,22 @@ const Dashboard = () => {
     // Convert to string and then parse back to number
     const finalValue = Number(finalValueBig.toFixed());
 
+    console.log("Final Value:", finalValue); // Add this line to log the final value
+
     await USDT_.methods
       .approve(ICU.address, finalValue)
       .send({ from: accounts[0] });
 
-    await ICU_.methods
+    const receipt = await ICU_.methods
       .regCoreMember(finalValue)
-      .send({ from: accounts[0] })
-      .on("receipt", function (receipt) {
-        setLoading(false);
-        console.log("Receipt, receipt");
-        alert("You have successfully Register Core Member");
-      });
+      .send({ from: accounts[0] });
+
+    console.log("Registration Receipt:", receipt); // Add this line to log the receipt
+
+    setLoading(false);
+    alert("You have successfully Register Core Member");
   } catch (e) {
-    console.log("In catch block of reg core member: ", e);
+    console.error("Error in regCoreMember:", e);
     alert("Register Core Member Failed");
     setLoading(false);
   }
