@@ -359,29 +359,23 @@ const Dashboard = () => {
     console.log("Loading set true: ", loading);
     const accounts = await web3.eth.requestAccounts();
     let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
-    console.log("accoutn", account);
+    console.log("account", accounts[0]);
     const BigNumber = require('bignumber.js');
     let value_ = await ICU_.methods.REGESTRATION_FESS().call();
     let tax = await ICU_.methods.taxRate().call();
 
-    // Convert value and tax to bignumber
+    // Convert value and tax to BigNumber
     value_ = new BigNumber(value_);
     tax = new BigNumber(tax);
 
     // Apply tax rate to value_
-    value_ = value_.plus(value_.times(tax).dividedBy(100));
-
-    // Set the desired decimal places (you can adjust this based on your requirements)
-    const decimalPlaces = 0;
-
-    // Round the result to the specified decimal places
-    value_ = value_.decimalPlaces(decimalPlaces, BigNumber.ROUND_HALF_UP);
+    value_ = value_.times(tax.plus(100)).dividedBy(100);
 
     // Multiply the result by 10 using BigNumber
-    value_ = value_.times(10).integerValue(BigNumber.ROUND_HALF_UP).toString();
+    value_ = value_.times(10).integerValue(BigNumber.ROUND_HALF_UP);
 
     // Convert to integer using scientificToInteger function
-    value_ = await scientificToInteger(value_);
+    value_ = await scientificToInteger(value_.toString());
 
     let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
     await USDT_.methods
@@ -401,7 +395,7 @@ const Dashboard = () => {
       .on("receipt", function (receipt) {
         setLoading(false);
         console.log("Receipt,receipt");
-        alert("You have successfully Register Core Member");
+        alert("You have successfully registered as a Core Member");
       });
   } catch (e) {
     console.log("In catch block of reg core member: ", e);
@@ -409,6 +403,7 @@ const Dashboard = () => {
     setLoading(false);
   }
 };
+
 
   const takeClaimCon = async () => {
     try {
