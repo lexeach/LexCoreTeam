@@ -367,14 +367,14 @@ const Dashboard = () => {
     value_ = new BigNumber(value_);
     tax = new BigNumber(tax);
     
-    value_ = value_.times(10);
+    //value_ = value_.times(10);
     tax = value_.times(tax).dividedBy(100);
 
     // Apply tax rate to value_
     value_ = value_.plus(tax);
 
     // Multiply the result by 10 using BigNumber
-    //value_ = value_.times(10);
+    value_ = value_.times(10);
     value_ = value_.integerValue(BigNumber.ROUND_CEIL);
     // Convert to string and then parse back to number
     value_ = await scientificToInteger(value_.toString());
