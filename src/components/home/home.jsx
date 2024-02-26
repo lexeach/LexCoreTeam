@@ -357,46 +357,36 @@ const Dashboard = () => {
   try {
     setLoading(true);
     const accounts = await web3.eth.requestAccounts();
-    let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
+    const ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
+    const USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
     const BigNumber = require('bignumber.js');
 
-    let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-    let tax = await ICU_.methods.taxRate().call();
+    const value_ = await ICU_.methods.REGESTRATION_FESS().call();
+    const tax = await ICU_.methods.taxRate().call();
 
     // Convert value and tax to BigNumber
-    value_ = new BigNumber(value_);
-    tax = new BigNumber(tax);
-    
-    //value_ = value_.times(10);
-    tax = value_.times(tax).dividedBy(100);
+    const valueBig = new BigNumber(value_);
+    const taxBig = new BigNumber(tax);
 
     // Apply tax rate to value_
-    value_ = value_.plus(tax);
+    const taxedValueBig = valueBig.times(taxBig).dividedBy(100);
 
     // Multiply the result by 10 using BigNumber
-    value_ = value_.times(10);
-    value_ = value_.integerValue(BigNumber.ROUND_CEIL);
-    // Convert to string and then parse back to number
-    value_ = await scientificToInteger(value_.toString());
+    const finalValueBig = taxedValueBig.times(10);
 
-    let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
+    // Convert to string and then parse back to number
+    const finalValue = Number(finalValueBig.toFixed());
+
     await USDT_.methods
-      .approve(ICU.address, value_)
-      .send({ from: accounts[0] })
-      .on("receipt", function (receipt) {
-        setLoading(false);
-      })
-      .on("error", function (error) {
-        setLoading(false);
-        console.log(error);
-      });
+      .approve(ICU.address, finalValue)
+      .send({ from: accounts[0] });
 
     await ICU_.methods
-      .regCoreMember(value_)
+      .regCoreMember(finalValue)
       .send({ from: accounts[0] })
       .on("receipt", function (receipt) {
         setLoading(false);
-        console.log("Receipt,receipt");
+        console.log("Receipt, receipt");
         alert("You have successfully Register Core Member");
       });
   } catch (e) {
