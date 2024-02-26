@@ -374,7 +374,7 @@ const Dashboard = () => {
     value_ = value_.times(10);
 
     // Convert to string and then parse back to number
-    value_ = Number(value_.toString());
+    value_ = await scientificToInteger(value_.toString());
 
     let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
     await USDT_.methods
