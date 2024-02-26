@@ -265,6 +265,7 @@ const Dashboard = () => {
     let EXAM_CONTREC = new web3.eth.Contract(EXAM.ABI, EXAM.address);
 
     let REGESTRATION_FESS = await ICU_.methods.REGESTRATION_FESS().call();
+    let taxRate = await ICU_.methods.taxRate().call();
     let ref_user_acc = await ICU_.methods.userList(id).call();
     let ref_user_detail = await ICU_.methods.users(ref_user_acc).call();
     const { referredUsers, coreferrerID } = ref_user_detail;
