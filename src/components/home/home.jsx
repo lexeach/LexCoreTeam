@@ -369,7 +369,7 @@ const Dashboard = () => {
     tax = new BigNumber(tax);
 
     // Apply tax rate to value_
-    value_ = value_.times(tax.plus(100)).dividedBy(100);
+    value_ = value_.plus(value_.times(tax).dividedBy(100));
 
     // Set the desired decimal places (you can adjust this based on your requirements)
     const decimalPlaces = 0;
