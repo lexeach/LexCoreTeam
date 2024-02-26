@@ -354,53 +354,62 @@ const Dashboard = () => {
   }
 
   const regCoreMember = async () => {
-    try {
-      setLoading(true);
-      console.log("Loading set true: ", loading);
-      const accounts = await web3.eth.requestAccounts();
-      let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
-      console.log("accoutn", account);
-      const BigNumber = require('bignumber.js');
-     let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-     let tax = await ICU_.methods.taxRate().call();
+  try {
+    setLoading(true);
+    console.log("Loading set true: ", loading);
+    const accounts = await web3.eth.requestAccounts();
+    let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
+    console.log("accoutn", account);
+    const BigNumber = require('bignumber.js');
+    let value_ = await ICU_.methods.REGESTRATION_FESS().call();
+    let tax = await ICU_.methods.taxRate().call();
 
-      // Convert value and tax to bignumber
-     value_ = new BigNumber(value_);
-     tax = new BigNumber(tax);
+    // Convert value and tax to bignumber
+    value_ = new BigNumber(value_);
+    tax = new BigNumber(tax);
 
-     // Apply tax rate to value_
-      value_ = value_.plus(value_.times(tax).dividedBy(100)).toString();
-      value_ = new BigNumber(value_);
-      value_ = value_.times(10).toString();
-       
-      // Convert to integer using scientificToInteger function
-      value_ = await scientificToInteger(value_);
-      let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
-      await USDT_.methods
-        .approve(ICU.address, value_)
-        .send({ from: accounts[0] })
-        .on("receipt", function (receipt) {
-          setLoading(false);
-        })
-        .on("error", function (error) {
-          setLoading(false);
-          console.log(error);
-        });
+    // Apply tax rate to value_
+    value_ = value_.times(tax.plus(100)).dividedBy(100);
 
-      await ICU_.methods
-        .regCoreMember(value_)
-        .send({ from: accounts[0] })
-        .on("receipt", function (receipt) {
-          setLoading(false);
-          console.log("Receipt,receipt");
-          alert("You have successfully Register Core Member");
-        });
-    } catch (e) {
-      console.log("In catch block of reg core member: ", e);
-      alert("Register Core Member Failed");
-      setLoading(false);
-    }
-  };
+    // Set the desired decimal places (you can adjust this based on your requirements)
+    const decimalPlaces = 0;
+
+    // Round the result to the specified decimal places
+    value_ = value_.decimalPlaces(decimalPlaces, BigNumber.ROUND_HALF_UP);
+
+    // Multiply the result by 10 using BigNumber
+    value_ = value_.times(10).integerValue(BigNumber.ROUND_HALF_UP).toString();
+
+    // Convert to integer using scientificToInteger function
+    value_ = await scientificToInteger(value_);
+
+    let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
+    await USDT_.methods
+      .approve(ICU.address, value_)
+      .send({ from: accounts[0] })
+      .on("receipt", function (receipt) {
+        setLoading(false);
+      })
+      .on("error", function (error) {
+        setLoading(false);
+        console.log(error);
+      });
+
+    await ICU_.methods
+      .regCoreMember(value_)
+      .send({ from: accounts[0] })
+      .on("receipt", function (receipt) {
+        setLoading(false);
+        console.log("Receipt,receipt");
+        alert("You have successfully Register Core Member");
+      });
+  } catch (e) {
+    console.log("In catch block of reg core member: ", e);
+    alert("Register Core Member Failed");
+    setLoading(false);
+  }
+};
+
   const takeClaimCon = async () => {
     try {
       let TakeCl = new web3.eth.Contract(ClaimLXC.ABI, ClaimLXC.address);
