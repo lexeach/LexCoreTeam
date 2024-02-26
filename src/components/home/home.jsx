@@ -356,11 +356,10 @@ const Dashboard = () => {
   const regCoreMember = async () => {
   try {
     setLoading(true);
-    console.log("Loading set true: ", loading);
     const accounts = await web3.eth.requestAccounts();
     let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
-    console.log("account", accounts[0]);
     const BigNumber = require('bignumber.js');
+
     let value_ = await ICU_.methods.REGESTRATION_FESS().call();
     let tax = await ICU_.methods.taxRate().call();
 
@@ -369,18 +368,13 @@ const Dashboard = () => {
     tax = new BigNumber(tax);
 
     // Apply tax rate to value_
-    // Multiply the result by 10 using BigNumber and round up
-    //value_ = value_.times(tax.plus(100)).dividedBy(100);
-    
+    value_ = value_.plus(value_.times(tax).dividedBy(100));
 
     // Multiply the result by 10 using BigNumber
-    value_ = value_.plus(value_.times(tax)/100).integerValue(BigNumber.ROUND_CEIL);
-    // Multiply the result by 10 using BigNumber and round down
-    value_ = value_.times(10).integerValue(BigNumber.ROUND_FLOOR);
+    value_ = value_.times(10);
 
-
-    // Convert to integer using scientificToInteger function
-    value_ = await scientificToInteger(value_.toString());
+    // Convert to string and then parse back to number
+    value_ = Number(value_.toString());
 
     let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
     await USDT_.methods
@@ -400,7 +394,7 @@ const Dashboard = () => {
       .on("receipt", function (receipt) {
         setLoading(false);
         console.log("Receipt,receipt");
-        alert("You have successfully registered as a Core Member");
+        alert("You have successfully Register Core Member");
       });
   } catch (e) {
     console.log("In catch block of reg core member: ", e);
