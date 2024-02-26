@@ -372,31 +372,44 @@ const Dashboard = () => {
     const taxedValueBig = valueBig.times(taxBig).dividedBy(100);
 
     // Multiply the result by 10 using BigNumber
-    const finalValueBig = taxedValueBig.times(10);
+    const finalValueBig = taxedValueBig.plus(valueBig);
+
+
+    finalValue = finalValueBig.toString();
+       
+      // Convert to integer using scientificToInteger function
+      finalValue = await scientificToInteger(finalValue);
+    
 
     // Convert to string and then parse back to number
-    const finalValue = Number(finalValueBig.toFixed());
-
-    console.log("Final Value:", finalValue); // Add this line to log the final value
-
+   // const finalValue = Number(finalValueBig.toFixed());
+    let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
+    
     await USDT_.methods
-      .approve(ICU.address, finalValue)
-      .send({ from: accounts[0] });
+        .approve(ICU.address, value_)
+        .send({ from: accounts[0] })
+        .on("receipt", function (receipt) {
+          setLoading(false);
+        })
+        .on("error", function (error) {
+          setLoading(false);
+          console.log(error);
+        });
 
-    const receipt = await ICU_.methods
-      .regCoreMember(finalValue)
-      .send({ from: accounts[0] });
-
-    console.log("Registration Receipt:", receipt); // Add this line to log the receipt
-
-    setLoading(false);
-    alert("You have successfully Register Core Member");
-  } catch (e) {
-    console.error("Error in regCoreMember:", e);
-    alert("Register Core Member Failed");
-    setLoading(false);
-  }
-};
+      await ICU_.methods
+        .regCoreMember(value_)
+        .send({ from: accounts[0] })
+        .on("receipt", function (receipt) {
+          setLoading(false);
+          console.log("Receipt,receipt");
+          alert("You have successfully Register Core Member");
+        });
+    } catch (e) {
+      console.log("In catch block of reg core member: ", e);
+      alert("Register Core Member Failed");
+      setLoading(false);
+    }
+  };
 
 
   const takeClaimCon = async () => {
