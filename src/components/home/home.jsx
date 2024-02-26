@@ -372,7 +372,7 @@ const Dashboard = () => {
 
     // Multiply the result by 10 using BigNumber
     value_ = value_.times(10);
-
+    value_ = value_.integerValue(BigNumber.ROUND_CEIL);
     // Convert to string and then parse back to number
     value_ = await scientificToInteger(value_.toString());
 
