@@ -369,7 +369,9 @@ const Dashboard = () => {
     tax = new BigNumber(tax);
 
     // Apply tax rate to value_
-    value_ = value_.times(tax.plus(100)).dividedBy(100);
+    // Multiply the result by 10 using BigNumber and round up
+    value_ = value_.times(10).integerValue(BigNumber.ROUND_CEIL);
+
 
     // Multiply the result by 10 using BigNumber
     value_ = value_.times(10).integerValue(BigNumber.ROUND_HALF_UP);
