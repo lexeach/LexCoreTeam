@@ -354,38 +354,29 @@ const Dashboard = () => {
   }
 
   const regCoreMember = async () => {
-  try {
-    setLoading(true);
-    const accounts = await web3.eth.requestAccounts();
-    const ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
-    const USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
-    const BigNumber = require('bignumber.js');
+    try {
+      setLoading(true);
+      console.log("Loading set true: ", loading);
+      const accounts = await web3.eth.requestAccounts();
+      let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
+      console.log("accoutn", account);
+      const BigNumber = require('bignumber.js');
+     let value_ = await ICU_.methods.REGESTRATION_FESS().call();
+     let tax = await ICU_.methods.taxRate().call();
 
-    const value_ = await ICU_.methods.REGESTRATION_FESS().call();
-    const tax = await ICU_.methods.taxRate().call();
+      // Convert value and tax to bignumber
+     value_ = new BigNumber(value_);
+     tax = new BigNumber(tax);
 
-    // Convert value and tax to BigNumber
-    const valueBig = new BigNumber(value_);
-    const taxBig = new BigNumber(tax);
-
-    // Apply tax rate to value_
-    const taxedValueBig = valueBig.times(taxBig).dividedBy(100);
-
-    // Multiply the result by 10 using BigNumber
-    const finalValueBig = taxedValueBig.plus(valueBig);
-
-
-    finalValue = finalValueBig.toString();
+     // Apply tax rate to value_
+      value_ = value_.plus(value_.times(tax).dividedBy(100)).toString();
+      value_ = new BigNumber(value_);
+      value_ = value_.times(10).toString();
        
       // Convert to integer using scientificToInteger function
-      finalValue = await scientificToInteger(finalValue);
-    
-
-    // Convert to string and then parse back to number
-   // const finalValue = Number(finalValueBig.toFixed());
-    let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
-    
-    await USDT_.methods
+      value_ = await scientificToInteger(value_);
+      let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
+      await USDT_.methods
         .approve(ICU.address, value_)
         .send({ from: accounts[0] })
         .on("receipt", function (receipt) {
@@ -410,8 +401,6 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
-
-
   const takeClaimCon = async () => {
     try {
       let TakeCl = new web3.eth.Contract(ClaimLXC.ABI, ClaimLXC.address);
