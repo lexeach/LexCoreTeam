@@ -366,7 +366,9 @@ const Dashboard = () => {
       value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
 
      // Multiply the result by 10
-       value_ = Math.ceil((Number(value_) * 10)).toString();
+      value_ = (Number(value_) * 10).toFixed(4);
+      value_ = parseFloat(value_);
+
 
      // Convert to integer using scientificToInteger function
      value_ = await scientificToInteger(value_);
