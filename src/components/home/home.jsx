@@ -360,16 +360,16 @@ const Dashboard = () => {
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
      let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-let tax = await ICU_.methods.taxRate().call();
+      let tax = await ICU_.methods.taxRate().call();
 
-// Apply tax rate to value_
-value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
+     // Apply tax rate to value_
+      value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
 
-// Multiply the result by 10
-value_ = (Number(value_) * 10).toString();
+     // Multiply the result by 10
+      //value_ = (Number(value_) * 10).toString();
 
-// Convert to integer using scientificToInteger function
-value_ = await scientificToInteger(value_);
+     // Convert to integer using scientificToInteger function
+     value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
