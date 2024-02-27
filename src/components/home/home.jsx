@@ -265,7 +265,6 @@ const Dashboard = () => {
     let EXAM_CONTREC = new web3.eth.Contract(EXAM.ABI, EXAM.address);
 
     let REGESTRATION_FESS = await ICU_.methods.REGESTRATION_FESS().call();
-    let taxRate = await ICU_.methods.taxRate().call();
     let ref_user_acc = await ICU_.methods.userList(id).call();
     let ref_user_detail = await ICU_.methods.users(ref_user_acc).call();
     const { referredUsers, coreferrerID } = ref_user_detail;
@@ -360,21 +359,17 @@ const Dashboard = () => {
       const accounts = await web3.eth.requestAccounts();
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
-      const BigNumber = require('bignumber.js');
      let value_ = await ICU_.methods.REGESTRATION_FESS().call();
-     let tax = await ICU_.methods.taxRate().call();
+let tax = await ICU_.methods.taxRate().call();
 
-      // Convert value and tax to bignumber
-     value_ = new BigNumber(value_);
-     tax = new BigNumber(tax);
+// Apply tax rate to value_
+value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
 
-     // Apply tax rate to value_
-      value_ = value_.plus(value_.times(tax).dividedBy(100)).toString();
-      value_ = new BigNumber(value_);
-      value_ = value_.times(10).toString();
-       
-      // Convert to integer using scientificToInteger function
-      value_ = await scientificToInteger(value_);
+// Multiply the result by 10
+//let valueNew = Number(value_) * 10;
+
+// Convert to integer using scientificToInteger function
+value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
