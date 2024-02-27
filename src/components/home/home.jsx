@@ -366,10 +366,8 @@ const Dashboard = () => {
       value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
 
      // Multiply the result by 10
-      value_ = (Number(value_) * 10).toFixed(4);
-      //value_ = parseFloat(value_);
-
-
+      value_ = Math.ceil((Number(value_) * 10)).toString();
+      
      // Convert to integer using scientificToInteger function
      value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
