@@ -367,7 +367,7 @@ const Dashboard = () => {
 
      // Multiply the result by 10
       value_ = (Number(value_) * 10).toFixed(4);
-      value_ = parseFloat(value_);
+      //value_ = parseFloat(value_);
 
 
      // Convert to integer using scientificToInteger function
