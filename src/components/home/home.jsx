@@ -372,7 +372,7 @@ const Dashboard = () => {
         // If you need it as a plain string, you can convert it back
         //value_ = roundedValue.toString();
 
-        value_ = await scientificToInteger(value_);
+       // value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
