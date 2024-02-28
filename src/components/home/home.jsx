@@ -362,17 +362,10 @@ const Dashboard = () => {
 
         console.log("account", account);
 
-        //let value_ = await ICU_.methods.coreFee().call();
-        value_ = 1950000000000000000000; // Round to 4 decimal places
+        // Manually set value_ to 1950000000000000000000
+        let value_ = "1950000000000000000000";
 
-        // Convert the string to a BigNumber to handle precise arithmetic
-        //const roundedValue = new web3.utils.BN(value_);
-       // console.log("Rounded value:", roundedValue.toString());
-
-        // If you need it as a plain string, you can convert it back
-        //value_ = roundedValue.toString();
-
-       // value_ = await scientificToInteger(value_);
+        value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
