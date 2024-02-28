@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Big from "big.js";
 
 import { useLocation } from "react-router-dom";
 import Web3 from "web3";
-import {
-  ICU,
-  BEP20,
-  USDT,
-  EXAM,
-  FootPrint,
-  ClaimLXC,
-} from "../../utils/web3.js";
+import { ICU, BEP20, USDT, EXAM, FootPrint, ClaimLXC } from "../../utils/web3.js";
 const Dashboard = () => {
   const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
   const [account, setAccount] = useState();
@@ -124,9 +116,9 @@ const Dashboard = () => {
       );
       let sumofall =
         (Number(totalRbcdClaim) *
-          (Number(elibleClaim) + Number(eligibleCorePercentages))) /
-          10000 -
-        claimTakenC;
+          (Number(elibleClaim) +
+          Number(eligibleCorePercentages))) /
+        10000 - claimTakenC;
       sumofall = sumofall.toString();
 
       setClaimAvailableClaim(
@@ -349,12 +341,12 @@ const Dashboard = () => {
 
   async function scientificToInteger(scientificNotation) {
     const [coefficient, exponent] = scientificNotation.split("e");
-    const decimalValue = new Big(coefficient);
-    const integerPart = decimalValue.round(0, 0).toFixed(); // Round to 0 decimal places
-    const fractionalPart = decimalValue.minus(integerPart);
+    const decimalValue = parseFloat(coefficient);
+    const integerPart = Math.floor(decimalValue);
+    const fractionalPart = decimalValue - integerPart;
     let stringValue = integerPart.toString();
     const splitArray = scientificNotation.split("e+");
-    const decimalPlaces = parseInt(splitArray[1]);
+    const decimalPlaces = splitArray[1];
     stringValue += fractionalPart.toFixed(decimalPlaces).slice(2);
     console.log("String Value: ", stringValue);
     return stringValue;
@@ -363,17 +355,21 @@ const Dashboard = () => {
   const regCoreMember = async () => {
     try {
       setLoading(true);
+      console.log("Loading set true: ", loading);
       const accounts = await web3.eth.requestAccounts();
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
-      let value_ = await ICU_.methods.REGESTRATION_FESS().call();
+      console.log("accoutn", account);
+     let value_ = await ICU_.methods.REGESTRATION_FESS().call();
       let tax = await ICU_.methods.taxRate().call();
-      // Apply tax rate to value_
-      value_ = (
-        Number(value_) +
-        (Number(value_) * Number(tax)) / 100
-      ).toString();
-      value_ = (Number(value_) * 10).toString();
-      value_ = await scientificToInteger(value_);
+
+     // Apply tax rate to value_
+      value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
+
+     // Multiply the result by 10
+      value_ = Math.ceil((Number(value_) * 10)).toString();
+      
+     // Convert to integer using scientificToInteger function
+     value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
@@ -427,7 +423,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Sub Admin </h6>
+              <h6>Partner</h6>
               <h4 className="mb-0">{exSubAdmin ? "YES" : "NO"}</h4>
             </div>
           </div>
@@ -481,7 +477,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Claim AVailable</h6>
+              <h6>Claim Available</h6>
               <h4 className="mb-0">
                 {claimAvailable ? claimAvailable : 0} LXC
               </h4>
@@ -492,7 +488,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Claim Token</h6>
+              <h6>Claim Taken</h6>
               <h4 className="mb-0">{claimTaken ? claimTaken : 0} LXC</h4>
             </div>
           </div>
@@ -530,7 +526,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Total RBCD</h6>
+              <h6>Total Promoter RBCD</h6>
               <h4 className="mb-0">{total_rbcd ? total_rbcd : 0} LXC</h4>
             </div>
           </div>
@@ -549,7 +545,7 @@ const Dashboard = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
               <div className="card-sp">
                 <div className="card-body">
-                  <h6>Core Referrer ID</h6>
+                  <h6>Core Sponsor ID</h6>
                   <h4 className="mb-0">
                     {coreReferrerID ? coreReferrerID : 0}{" "}
                   </h4>
@@ -635,7 +631,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Total RBCD </h6>
+              <h6>Total User RBCD </h6>
               <h4 className="mb-0">{total_rbcdClaim ? total_rbcdClaim : 0}</h4>
             </div>
           </div>
@@ -656,7 +652,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>TakeClaim </h6>
+              <h6>Claim Taken</h6>
               <h4 className="mb-0">
                 {claimTakenClaim ? claimTakenClaim : 0} LXC
               </h4>
@@ -666,7 +662,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Claim Taken </h6>
+              <h6>Click User RBCD </h6>
               <button onClick={takeClaimCon}>Take Calim</button>
             </div>
           </div>
@@ -682,25 +678,28 @@ const Dashboard = () => {
         <div className="col-lg-6 col-md-6 col-sm-6 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Take Claim</h6>
+              <h6>Click Promoter RBCD</h6>
               <button onClick={claimTokens}>Claim</button>
             </div>
           </div>
         </div>
-        {/* {!coreUserExist && ( */}
-        <div className="col-lg-6 col-md-6 col-sm-6 grid-margin">
-          <div className="card">
-            <div className="card-body">
-              <h6>Reg Core Member</h6>
+        {!coreUserExist && (
+          <div className="col-lg-6 col-md-6 col-sm-6 grid-margin">
+            <div className="card">
+              <div className="card-body">
+                <h6>Reg Core Member</h6>
 
-              {loading && (
-                <div className="loader-overlay"> Transaction is Approving </div>
-              )}
-              <button onClick={regCoreMember}>Reg Core Member</button>
+                {loading && (
+                  <div className="loader-overlay">
+                    {" "}
+                    Transaction is Approving{" "}
+                  </div>
+                )}
+                <button onClick={regCoreMember}>Reg Core Member</button>
+              </div>
             </div>
           </div>
-        </div>
-        {/* )} */}
+        )}
       </div>
     </div>
   );
