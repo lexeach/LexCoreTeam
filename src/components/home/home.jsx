@@ -423,7 +423,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Sub Admin </h6>
+              <h6>Partner</h6>
               <h4 className="mb-0">{exSubAdmin ? "YES" : "NO"}</h4>
             </div>
           </div>
@@ -477,7 +477,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Claim AVailable</h6>
+              <h6>Claim Available</h6>
               <h4 className="mb-0">
                 {claimAvailable ? claimAvailable : 0} LXC
               </h4>
@@ -488,7 +488,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Claim Token</h6>
+              <h6>Claim Taken</h6>
               <h4 className="mb-0">{claimTaken ? claimTaken : 0} LXC</h4>
             </div>
           </div>
@@ -526,7 +526,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Total RBCD</h6>
+              <h6>Total Promoter RBCD</h6>
               <h4 className="mb-0">{total_rbcd ? total_rbcd : 0} LXC</h4>
             </div>
           </div>
@@ -545,7 +545,7 @@ const Dashboard = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
               <div className="card-sp">
                 <div className="card-body">
-                  <h6>Core Referrer ID</h6>
+                  <h6>Core Sponsor ID</h6>
                   <h4 className="mb-0">
                     {coreReferrerID ? coreReferrerID : 0}{" "}
                   </h4>
@@ -631,7 +631,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Total RBCD </h6>
+              <h6>Total User RBCD </h6>
               <h4 className="mb-0">{total_rbcdClaim ? total_rbcdClaim : 0}</h4>
             </div>
           </div>
@@ -652,7 +652,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>TakeClaim </h6>
+              <h6>Claim Taken</h6>
               <h4 className="mb-0">
                 {claimTakenClaim ? claimTakenClaim : 0} LXC
               </h4>
@@ -662,7 +662,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Claim Taken </h6>
+              <h6>Click User RBCD </h6>
               <button onClick={takeClaimCon}>Take Calim</button>
             </div>
           </div>
@@ -678,7 +678,7 @@ const Dashboard = () => {
         <div className="col-lg-6 col-md-6 col-sm-6 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Take Claim</h6>
+              <h6>Click Promoter RBCD</h6>
               <button onClick={claimTokens}>Claim</button>
             </div>
           </div>
