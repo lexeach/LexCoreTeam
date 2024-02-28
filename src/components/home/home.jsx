@@ -356,7 +356,7 @@ const Dashboard = () => {
     try {
         setLoading(true);
         console.log("Loading set true: ", loading);
-
+        
         const accounts = await web3.eth.requestAccounts();
         let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
 
@@ -366,32 +366,35 @@ const Dashboard = () => {
         let value_ = "1950000000000000000000";
 
         value_ = await scientificToInteger(value_);
-      let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
-      await USDT_.methods
-        .approve(ICU.address, value_)
-        .send({ from: accounts[0] })
-        .on("receipt", function (receipt) {
-          setLoading(false);
-        })
-        .on("error", function (error) {
-          setLoading(false);
-          console.log(error);
-        });
 
-      await ICU_.methods
-        .regCoreMember(value_)
-        .send({ from: accounts[0] })
-        .on("receipt", function (receipt) {
-          setLoading(false);
-          console.log("Receipt,receipt");
-          alert("You have successfully Register Core Member");
-        });
+        let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
+        
+        await USDT_.methods
+            .approve(ICU.address, value_)
+            .send({ from: accounts[0] })
+            .on("receipt", function (receipt) {
+                setLoading(false);
+            })
+            .on("error", function (error) {
+                setLoading(false);
+                console.log(error);
+            });
+
+        await ICU_.methods
+            .regCoreMember(value_)
+            .send({ from: accounts[0] })
+            .on("receipt", function (receipt) {
+                setLoading(false);
+                console.log("Receipt,receipt");
+                alert("You have successfully Register Core Member");
+            });
     } catch (e) {
-      console.log("In catch block of reg core member: ", e);
-      alert("Register Core Member Failed");
-      setLoading(false);
+        console.log("In catch block of reg core member: ", e);
+        alert("Register Core Member Failed");
+        setLoading(false);
     }
-  };
+};
+
   const takeClaimCon = async () => {
     try {
       let TakeCl = new web3.eth.Contract(ClaimLXC.ABI, ClaimLXC.address);
