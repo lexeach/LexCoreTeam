@@ -367,7 +367,7 @@ const Dashboard = () => {
 
         // Convert the string to a BigNumber to handle precise arithmetic
         const roundedValue = new web3.utils.BN(value_);
-        console.log("Rounded value:", roundedValue.toString());
+       // console.log("Rounded value:", roundedValue.toString());
 
         // If you need it as a plain string, you can convert it back
         value_ = roundedValue.toString();
