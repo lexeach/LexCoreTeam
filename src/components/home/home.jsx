@@ -363,7 +363,7 @@ const Dashboard = () => {
         console.log("account", account);
 
         // Manually set value_ to 1950000000000000000000
-        let value_ = "1950000000000000000000";
+        let value_ = Number(1950000000000000000000);
 
         value_ = await scientificToInteger(value_);
 
