@@ -359,17 +359,9 @@ const Dashboard = () => {
       const accounts = await web3.eth.requestAccounts();
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
       console.log("accoutn", account);
-     let value_ = await ICU_.methods.coreFee().call();
-      //let tax = await ICU_.methods.taxRate().call();
-
-     // Apply tax rate to value_
-      value_ = Number(value_).toString();
-
-     // Multiply the result by 10
-     // value_ = Math.ceil((Number(value_) * 10)).toString();
-      
-     // Convert to integer using scientificToInteger function
-     value_ = await scientificToInteger(value_);
+      let value_ = await ICU_.methods.coreFee().call();
+      value_ = (Number(value_) * 10).toString();
+      value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
