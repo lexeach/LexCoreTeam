@@ -356,17 +356,22 @@ const Dashboard = () => {
     try {
         setLoading(true);
         console.log("Loading set true: ", loading);
-        
+
         const accounts = await web3.eth.requestAccounts();
         let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
-        
-        console.log("account", account);
-        
-        let value_ = await ICU_.methods.coreFee().call();
-        value_ = (Number(value_) * 10).toFixed(4);
 
-        console.log("Rounded value:", value_);
-        
+        console.log("account", account);
+
+        let value_ = await ICU_.methods.coreFee().call();
+        value_ = (Number(value_) * 10).toFixed(4); // Round to 4 decimal places
+
+        // Convert the string to a BigNumber to handle precise arithmetic
+        const roundedValue = new web3.utils.BN(value_);
+        console.log("Rounded value:", roundedValue.toString());
+
+        // If you need it as a plain string, you can convert it back
+        value_ = roundedValue.toString();
+
         value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
