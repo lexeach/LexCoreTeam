@@ -339,14 +339,14 @@ const Dashboard = () => {
     } catch (e) {}
   };
 
-  async function scientificToInteger(scientificNotation) {
+ async function scientificToInteger(scientificNotation) {
     const [coefficient, exponent] = scientificNotation.split("e");
-    const decimalValue = parseFloat(coefficient);
-    const integerPart = Math.floor(decimalValue);
-    const fractionalPart = decimalValue - integerPart;
+    const decimalValue = new Big(coefficient);
+    const integerPart = decimalValue.round(0, 0).toFixed(); // Round to 0 decimal places
+    const fractionalPart = decimalValue.minus(integerPart);
     let stringValue = integerPart.toString();
     const splitArray = scientificNotation.split("e+");
-    const decimalPlaces = splitArray[1];
+    const decimalPlaces = parseInt(splitArray[1]);
     stringValue += fractionalPart.toFixed(decimalPlaces).slice(2);
     console.log("String Value: ", stringValue);
     return stringValue;
@@ -355,21 +355,17 @@ const Dashboard = () => {
   const regCoreMember = async () => {
     try {
       setLoading(true);
-      console.log("Loading set true: ", loading);
       const accounts = await web3.eth.requestAccounts();
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
-      console.log("accoutn", account);
-     let value_ = await ICU_.methods.REGESTRATION_FESS().call();
+      let value_ = await ICU_.methods.REGESTRATION_FESS().call();
       let tax = await ICU_.methods.taxRate().call();
-
-     // Apply tax rate to value_
-      value_ = (Number(value_) + (Number(value_) * Number(tax) / 100)).toString();
-
-     // Multiply the result by 10
-      value_ = Math.ceil((Number(value_) * 10)).toString();
-      
-     // Convert to integer using scientificToInteger function
-     value_ = await scientificToInteger(value_);
+      // Apply tax rate to value_
+      value_ = (
+        Number(value_) +
+        (Number(value_) * Number(tax)) / 100
+      ).toString();
+      value_ = (Number(value_) * 10).toString();
+      value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
