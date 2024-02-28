@@ -361,10 +361,11 @@ const Dashboard = () => {
       console.log("accoutn", account);
       let value_ = await ICU_.methods.coreFee().call();
       value_ = (Number(value_) * 10).toString();
-      value_ = await scientificToInteger(value_);
+      
       value_ = parseFloat(value_).toFixed(4);
 
         console.log("Rounded value:", value_);
+      value_ = await scientificToInteger(value_);
       let USDT_ = new web3.eth.Contract(USDT.ABI, USDT.address);
       await USDT_.methods
         .approve(ICU.address, value_)
