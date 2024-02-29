@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Big from "big.js";
-
+import { Buffer } from "buffer";
 import { useLocation } from "react-router-dom";
 import Web3 from "web3";
 
