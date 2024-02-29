@@ -3,6 +3,7 @@ import Big from "big.js";
 
 import { useLocation } from "react-router-dom";
 import Web3 from "web3";
+import Footer from "../Footer.js";
 import {
   ICU,
   BEP20,
@@ -702,6 +703,8 @@ const Dashboard = () => {
         </div>
         {/* )} */}
       </div>
+    </div>
+    <Footer />
     </div>
   );
 };
