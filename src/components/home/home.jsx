@@ -3,7 +3,7 @@ import Big from "big.js";
 
 import { useLocation } from "react-router-dom";
 import Web3 from "web3";
-import Footer from "../Footer.js";
+
 import {
   ICU,
   BEP20,
@@ -12,6 +12,8 @@ import {
   FootPrint,
   ClaimLXC,
 } from "../../utils/web3.js";
+import Footer from "../Footer.js";
+import Flowbite from "../Flowbit.js";
 const Dashboard = () => {
   const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
   const [account, setAccount] = useState();
