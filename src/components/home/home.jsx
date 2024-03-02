@@ -667,7 +667,7 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h6>Claim Users RBCD</h6>
-              <button onClick={takeClaimCon}>Take Calim</button>
+              <button onClick={takeClaimCon}>Take Claim</button>
             </div>
           </div>
         </div>
