@@ -125,8 +125,7 @@ const Dashboard = () => {
       let sumofall =
         (Number(totalRbcdClaim) *
           (Number(elibleClaim) + Number(eligibleCorePercentages))) /
-          10000 -
-        claimTakenC;
+          10000 - Number(claimTakenC);
       sumofall = sumofall.toString();
 
       setClaimAvailableClaim(
