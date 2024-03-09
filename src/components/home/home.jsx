@@ -122,8 +122,9 @@ const Dashboard = () => {
       setClaimTakenClaim(
         Number(await web3.utils.fromWei(claimTakenC, "ether")).toFixed(4)
       );
-     // let sumofall = (Number(totalRbcdClaim) * (Number(elibleClaim) + Number(eligibleCorePercentages))) / 10000 - Number(claimTakenC);
-      let sumofall = (totalRbcdClaim * (elibleClaim + eligibleCorePercentages)) / 10000 - claimTakenC;
+     let sumofall = (Number(totalRbcdClaim) * 
+                     (Number(elibleClaim) +
+                      Number(eligibleCorePercentages))) / 10000 - Number(claimTakenC);
       
       sumofall = sumofall.toString();
      
