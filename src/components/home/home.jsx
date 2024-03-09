@@ -127,9 +127,9 @@ const Dashboard = () => {
           (Number(elibleClaim) + Number(eligibleCorePercentages))) /
           10000 - Number(claimTakenC);
       sumofall = sumofall.toString();
-
+      let weiValue = await web3.utils.fromWei(sumofall, "ether");
       setClaimAvailableClaim(
-        Number(await web3.utils.fromWei(sumofall, "ether")).toFixed(4)
+        Number(await web3.utils.fromWei(weiValue, "ether")).toFixed(4)
       );
     }
     user_detail();
