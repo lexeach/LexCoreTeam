@@ -503,7 +503,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Frozen Balance </h6>
+              <h6>Frozen LXC </h6>
               <h4 className="mb-0">{frznBalance ? frznBalance : 0} LXC</h4>
             </div>
           </div>
@@ -512,7 +512,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Token Balance</h6>
+              <h6>LXC Balance</h6>
               <h4 className="mb-0">{tokenBalance ? tokenBalance : 0} LXC</h4>
             </div>
           </div>
@@ -570,7 +570,7 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6 col-sm-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Total Promoter RBCD</h6>
+              <h6>Total super users RBCD</h6>
               <h4 className="mb-0">{total_rbcd ? total_rbcd : 0} LXC</h4>
             </div>
           </div>
@@ -722,7 +722,7 @@ const Dashboard = () => {
         <div className="col-lg-6 col-md-6 col-sm-6 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h6>Claim Promoter RBCD</h6>
+              <h6>Claim super users RBCD</h6>
               <button onClick={claimTokens}>Claim</button>
             </div>
           </div>
