@@ -63,6 +63,7 @@ const Dashboard = () => {
       const account = await web3.eth.requestAccounts();
 
       let EXAM_CONTREC = new web3.eth.Contract(EXAM.ABI, EXAM.address);
+      // let account = ["0x8a16fFd38cC6Cf992ACA65D852073381232Eb621"];
       let subAdmin = await EXAM_CONTREC.methods.isPass(account[0]).call();
       setExSubAdmin(subAdmin);
       let ICU_ = new web3.eth.Contract(ICU.ABI, ICU.address);
@@ -113,6 +114,7 @@ const Dashboard = () => {
       let ClaimCon = new web3.eth.Contract(ClaimLXC.ABI, ClaimLXC.address);
       let FootPrnt = new web3.eth.Contract(FootPrint.ABI, FootPrint.address);
       let totalRbcdClaim = await FootPrnt.methods.totalRBCD().call();
+      console.log("Total RBCD Claim: ", totalRbcdClaim);
       setTotal_rbcdClaim(
         Number(await web3.utils.fromWei(totalRbcdClaim, "ether")).toFixed(4)
       );
@@ -122,18 +124,55 @@ const Dashboard = () => {
       setClaimTakenClaim(
         Number(await web3.utils.fromWei(claimTakenC, "ether")).toFixed(4)
       );
-     let sumofall = (Number(totalRbcdClaim) * 
-                     (Number(elibleClaim) +
-                      Number(eligibleCorePercentages))) / 10000 - Number(claimTakenC);
-      
+      console.log(
+        " Number(totalRbcdClaim):  ",
+        Number(totalRbcdClaim),
+        Number(elibleClaim),
+        Number(eligibleCorePercentages),
+        Number(elibleClaim) + Number(eligibleCorePercentages),
+        Number(totalRbcdClaim) * Number(elibleClaim),
+        (Number(elibleClaim) + Number(eligibleCorePercentages)) / 10000
+      );
+
+      //   Number(claimTakenC),  (Number(totalRbcdClaim) *
+      //   (Number(elibleClaim) + Number(eligibleCorePercentages))) /
+      //   10000 -
+      // Number(claimTakenC);)
+      let sumofall =
+        (Number(totalRbcdClaim) *
+          (Number(elibleClaim) + Number(eligibleCorePercentages))) /
+          10000 -
+        Number(claimTakenC);
+
       sumofall = sumofall.toString();
-     
+      var scientificNumber = isScientificNotation(sumofall);
+      if (scientificNumber) {
+        sumofall = await scientificToInteger(sumofall);
+      }
       setClaimAvailableClaim(
         Number(await web3.utils.fromWei(sumofall, "ether")).toFixed(4)
       );
     }
     user_detail();
   }, []);
+  function isScientificNotation(number) {
+    // Convert the number to a string and test if it matches the scientific notation pattern
+    return /^-?\d+(\.\d+)?[eE][+-]?\d+$/.test(number.toString());
+  }
+
+  async function scientificToInteger(scientificNotation) {
+    const [coefficient, exponent] = scientificNotation.split("e");
+    const decimalValue = parseFloat(coefficient);
+    const integerPart = Math.floor(decimalValue);
+    const fractionalPart = decimalValue - integerPart;
+    let stringValue = integerPart.toString();
+    const splitArray = scientificNotation.split("e+");
+    const decimalPlaces = splitArray[1];
+    stringValue += fractionalPart.toFixed(decimalPlaces).slice(2);
+    console.log("String Value: ", stringValue);
+    return stringValue;
+  }
+
   async function epochToDate(epochTime) {
     if (epochTime == undefined || Number(epochTime) <= 0) {
       return "00/00/0000";
