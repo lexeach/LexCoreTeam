@@ -138,11 +138,13 @@ const Dashboard = () => {
       //   (Number(elibleClaim) + Number(eligibleCorePercentages))) /
       //   10000 -
       // Number(claimTakenC);)
+      let epsilon = 1e-10; // Set a small threshold
       let sumofall =
         (Number(totalRbcdClaim) *
           (Number(elibleClaim) + Number(eligibleCorePercentages))) /
           10000 -
         Number(claimTakenC);
+      sumofall = Math.abs(sumofall) < epsilon ? 0 : sumofall;
 
       sumofall = sumofall.toString();
       var scientificNumber = isScientificNotation(sumofall);
